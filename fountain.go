@@ -32,6 +32,7 @@
 package fountain
 
 import (
+	"bufio"
 	"encoding/xml"
 	"strings"
 )
@@ -39,31 +40,32 @@ import (
 const (
 	Version = `v0.0.0-dev`
 
+	// Types used in ElementSettings and Paragraph elements
+	EmptyLineType = iota
+	GeneralType
+	SceneHeadingType
+	ActionType
+	CharacterType
+	DialogueType
+	ParentheticalType
+	TransitionType
+	CastListType
+	ShotType
+	SingingType
+	NoteType
+	BoneyardType
+
 	// Style
-	UnderlineStyle = "Underline"
-	ItalicStyle    = "Italic"
-	BoldStyle      = "Bold"
-	AllCapsStyle   = "AllCaps"
-	Strikethrough  = "Strikethrough"
+	UnderlineStyle
+	ItalicStyle
+	BoldStyle
+	AllCapsStyle
+	Strikethrough
 
 	// Alignments
-	CenterAlignment = "Center"
-	LeftAlignment   = "Left"
-	RightAlignment  = "Right"
-
-	// Types used in ElementSettings and Paragraph elements
-	GeneralType       = "General"
-	SceneHeadingType  = "Scene Heading"
-	ActionType        = "Action"
-	CharacterType     = "Character"
-	DialogueType      = "Dialogue"
-	ParentheticalType = "Parenthetical"
-	TransitionType    = "Transition"
-	CastListType      = "Cast List"
-	ShotType          = "Shot"
-	SingingType       = "Singing"
-	NoteType          = "Note"
-	BoneyardType      = "Boneyard"
+	CenterAlignment
+	LeftAlignment
+	RightAlignment
 )
 
 type Fountain struct {
@@ -72,15 +74,8 @@ type Fountain struct {
 }
 
 type Elements struct {
-	Type    string `json:"type,omitempty"`
+	Type    int    `json:"type,omitempty"`
 	Content string `json:"content,omitempty"`
-}
-
-func isKeyValue(line string) bool {
-	if strings.Contain(line, ":") {
-		return true
-	}
-	return false
 }
 
 // isSceneHeading evaluates a line and return true if it looks like a scene heading or false otherwise
@@ -111,7 +106,7 @@ func isAction(line string) bool {
 }
 
 // isCharacter evaluates a prev, current and next lines and returns true if it looks like a Character or false otherwise
-func isCharacter(line string, prevLineEmpty bool, nextLineEmpty bool) bool {
+func isCharacter(line string, prevLineType int, nextLineType int) bool {
 	if strings.HasPrefix(current, "@") == true ||
 		(prevLineEmpty == true && nextLine == false && (current == strings.ToUpper(current))) {
 		true
@@ -150,9 +145,19 @@ func isCentered(line) bool {
 
 // Parse takes []byte and returns a FinalDraft struct and error
 func Parse(src []byte) (*FinalDraft, error) {
+	var s scanner.Scanner
+
 	document := new(Fountain)
-	//FIXME: Implement parser
-	return document, err
+	scanner = bufio.NewReader(src)
+	for scanner.Scan() {
+		// Read a line and decide what it is...
+		line := scanner.Text()
+		fmt.Println("DEBUG scan line:", line)
+	}
+	if err := scanner.Err(); err != nil {
+		return document, err
+	}
+	return document, nil
 }
 
 // ParseFile takes a filename and returns a FinalDraft struct and error

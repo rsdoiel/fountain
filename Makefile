@@ -14,7 +14,8 @@ ifeq ($(OS), Windows)
 	EXT = .exe
 endif
 
-#build: fountain.go
+build: fountain.go cmd/fountainfmt/fountainfmt.go
+	go build -o bin/fountainfmt$(EXT) cmd/fountainfmt/fountainfmt.go
 
 test:
 	go test

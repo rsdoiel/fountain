@@ -181,7 +181,7 @@ func format(element *Element) string {
 	case ActionType:
 		return wordWrap(element.Content, MaxWidth)
 	case CharacterType:
-		return strings.Repeat("    ", 3) + strings.ToUpper(strings.TrimSpace(element.Content))
+		return strings.Repeat("    ", 4) + strings.ToUpper(strings.TrimSpace(element.Content))
 	case ParentheticalType:
 		return strings.Repeat("    ", 3) + strings.TrimSpace(element.Content)
 	case DialogueType:
@@ -189,7 +189,7 @@ func format(element *Element) string {
 	case TransitionType:
 		s := strings.TrimSpace(element.Content)
 		if strings.HasSuffix(s, ".") {
-			return strings.Repeat("    ", 2) + s
+			return s
 		}
 		if strings.HasSuffix(s, "IN:") {
 			return s

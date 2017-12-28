@@ -173,6 +173,32 @@ func wordWrap(line string, width int) string {
 	return strings.Join(buf, "") + "\n"
 }
 
+// blockWrap will add left/right padding and wrap the text in the block
+func blockWrap(line, padding string, width int) string {
+	if len(padding)+len(line) <= width {
+		return padding + line
+	}
+	width = width - len(padding)
+	buf := []string{}
+	words := strings.Split(line, " ")
+	l := 0
+	for _, word := range words {
+		if l+len(word) < width {
+			if len(buf) > 0 {
+				buf = append(buf, " ", word)
+				l += len(word) + 1
+			} else {
+				buf = append(buf, padding, word)
+				l += len(padding) + len(word)
+			}
+		} else {
+			buf = append(buf, "\n", padding, word)
+			l = len(padding) + len(word)
+		}
+	}
+	return strings.Join(buf, "") + "\n"
+}
+
 // format considers elem.Type and formatting output
 func format(element *Element) string {
 	switch element.Type {
@@ -185,7 +211,7 @@ func format(element *Element) string {
 	case ParentheticalType:
 		return strings.Repeat("    ", 3) + strings.TrimSpace(element.Content)
 	case DialogueType:
-		return strings.Repeat("    ", 2) + element.Content
+		return blockWrap(element.Content, strings.Repeat("    ", 2), MaxWidth)
 	case TransitionType:
 		s := strings.TrimSpace(element.Content)
 		if strings.HasSuffix(s, ".") {

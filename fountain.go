@@ -34,7 +34,6 @@ package fountain
 import (
 	"bufio"
 	"bytes"
-	"fmt" // DEBUG
 	"io/ioutil"
 	"strings"
 )
@@ -70,6 +69,28 @@ const (
 	RightAlignment
 )
 
+var (
+	MaxWidth = 64
+)
+
+// Fountain is the document container. It is the type returned by Parse() and ParseFile()
+//
+//   screenplay, _ := ParseFile("screenplay.fountain")
+//   fmt.Println(screenplay.String())
+//
+type Fountain struct {
+	TitlePage []*Element
+	Elements  []*Element
+}
+
+// Element holds the parsed token in either the title page of the document or
+// scene list parts.
+type Element struct {
+	Type    int    `json:"type"`
+	Name    string `json:"name,omitempty"`
+	Content string `json:"content"`
+}
+
 func typeName(t int) string {
 	switch t {
 	case UnknownType:
@@ -78,6 +99,8 @@ func typeName(t int) string {
 		return "Empty"
 	case TitlePageType:
 		return "Title Page"
+	case TransitionType:
+		return "Transition"
 	case SceneHeadingType:
 		return "Scene Heading"
 	case ActionType:
@@ -88,8 +111,6 @@ func typeName(t int) string {
 		return "Dialogue"
 	case ParentheticalType:
 		return "Parenthetical"
-	case TransitionType:
-		return "Transition"
 	case LyricType:
 		return "Lyric"
 	case NoteType:
@@ -116,15 +137,67 @@ func typeName(t int) string {
 	return ""
 }
 
-type Fountain struct {
-	TitlePage []*Element
-	Elements  []*Element
+// alignRight will apply left padding such as used to format a transition.
+func alignRight(line string, width int) string {
+	l := len(line)
+	if l >= width {
+		return line
+	}
+	padL := width - l
+	return strings.Repeat(" ", padL) + line
 }
 
-type Element struct {
-	Type    int    `json:"type"`
-	Name    string `json:"name,omitempty"`
-	Content string `json:"content"`
+// wordWrap will try to break line at a suitable place if they are equal or
+// longer than width.
+func wordWrap(line string, width int) string {
+	if len(line) <= width {
+		return line
+	}
+	buf := []string{}
+	words := strings.Split(line, " ")
+	l := 0
+	for _, word := range words {
+		if l+len(word) < width {
+			if len(buf) > 0 {
+				buf = append(buf, " ", word)
+				l += len(word) + 1
+			} else {
+				buf = append(buf, word)
+				l += len(word)
+			}
+		} else {
+			buf = append(buf, "\n", word)
+			l = 0
+		}
+	}
+	return strings.Join(buf, "") + "\n"
+}
+
+// format considers elem.Type and formatting output
+func format(element *Element) string {
+	switch element.Type {
+	case SceneHeadingType:
+		return strings.ToUpper(strings.TrimSpace(element.Content))
+	case ActionType:
+		return wordWrap(element.Content, MaxWidth)
+	case CharacterType:
+		return strings.Repeat("    ", 3) + strings.ToUpper(strings.TrimSpace(element.Content))
+	case ParentheticalType:
+		return strings.Repeat("    ", 3) + strings.TrimSpace(element.Content)
+	case DialogueType:
+		return strings.Repeat("    ", 2) + element.Content
+	case TransitionType:
+		s := strings.TrimSpace(element.Content)
+		if strings.HasSuffix(s, ".") {
+			return strings.Repeat("    ", 2) + s
+		}
+		if strings.HasSuffix(s, "IN:") {
+			return s
+		}
+		return alignRight(strings.ToUpper(strings.TrimSpace(element.Content)), MaxWidth)
+	default:
+		return element.Content
+	}
 }
 
 // String returns an element as a string considering type
@@ -134,7 +207,7 @@ func (element *Element) String() string {
 		return element.Name + ":" + element.Content
 	default:
 		//FIXME: certain types should get a formatting treatment.
-		return element.Content
+		return format(element)
 	}
 }
 
@@ -155,7 +228,6 @@ func (doc *Fountain) String() string {
 			s = elem.String()
 			src = append(src, s)
 		}
-		src = append(src, s)
 	}
 	return strings.Join(src, "\n")
 }
@@ -163,7 +235,18 @@ func (doc *Fountain) String() string {
 // isTitlePage evaluates the current line to see if we're still in the
 // title page element.
 func isTitlePage(line string, prevType int) bool {
-	if prevType == TitlePageType && isSceneHeading(line, prevType) == false {
+	if prevType == TitlePageType && isSceneHeading(line, prevType) == false && isTransition(line, prevType) == false {
+		return true
+	}
+	return false
+}
+
+// isEmpty evaluates the current line to see if we're an "empty" line or still in title page.
+func isEmpty(line string, prevType int) bool {
+	if prevType == TitlePageType {
+		return false
+	}
+	if len(strings.TrimSpace(line)) == 0 {
 		return true
 	}
 	return false
@@ -195,6 +278,9 @@ func isAction(line string, prevType int) bool {
 	if strings.HasPrefix(line, "!") {
 		return true
 	}
+	if len(line) == 0 {
+		return false
+	}
 	if isSceneHeading(line, prevType) == false && isCharacter(line, prevType) == false && isDialogue(line, prevType) == false {
 		return true
 	}
@@ -205,12 +291,10 @@ func isAction(line string, prevType int) bool {
 func isCharacter(line string, prevType int) bool {
 	//FIXME: spec requires looking ahead an additional line
 	// we only have a prevType known so assuming nextType == EmptyType
-	nextType := EmptyType
-
 	if strings.HasPrefix(line, "@") {
 		return true
 	}
-	if line == strings.ToUpper(line) && prevType == EmptyType && nextType != EmptyType {
+	if line == strings.ToUpper(line) && prevType == EmptyType {
 		return true
 	}
 	return false
@@ -233,7 +317,8 @@ func isParenthetical(line string, prevType int) bool {
 	}
 }
 
-// isDialogue evaluates a prev, current and next lines and returns true if it looks like a Character or false otherwise
+// isDialogue evaluates a prev, current and next lines and returns true
+// if it looks like a Character or false otherwise
 func isDialogue(line string, prevType int) bool {
 	switch prevType {
 	case CharacterType:
@@ -252,13 +337,12 @@ func isTransition(line string, prevType int) bool {
 	if strings.HasPrefix(line, ">") == true && strings.HasSuffix(line, "<") == false {
 		return true
 	}
-	if line != strings.ToUpper(line) {
-		return false
-	}
-	if strings.HasSuffix(line, "TO:") && prevType == EmptyType {
+	if strings.HasSuffix(line, "TO:") || strings.HasSuffix(line, "IN:") {
 		return true
 	}
-	// FIXME: What about final transitions like "FADE TO BLACK."?
+	if strings.HasPrefix(line, "FADE TO") {
+		return true
+	}
 	return false
 }
 
@@ -321,7 +405,7 @@ func isBoneyardStart(line string, prevType int) bool {
 	if prevType != BoneyardType && strings.HasPrefix(line, "/*") {
 		return true
 	}
-	return true
+	return false
 }
 
 // isBoneyardEnd evaluates if line is the end of a comment section
@@ -330,7 +414,7 @@ func isBoneyardEnd(line string, prevType int) bool {
 	if prevType == BoneyardType && strings.HasSuffix(line, "*/") {
 		return true
 	}
-	return true
+	return false
 }
 
 // getLineType evaluates the current line considering previous line type
@@ -339,6 +423,8 @@ func getLineType(line string, prevType int) int {
 	switch {
 	case isTitlePage(line, prevType):
 		return TitlePageType
+	case isTransition(line, prevType):
+		return TransitionType
 	case isSceneHeading(line, prevType):
 		return SceneHeadingType
 	case isAction(line, prevType):
@@ -349,14 +435,14 @@ func getLineType(line string, prevType int) int {
 		return ParentheticalType
 	case isDialogue(line, prevType):
 		return DialogueType
-	case isTransition(line, prevType):
-		return TransitionType
 	case isLyric(line, prevType):
 		return LyricType
 	case isNote(line, prevType):
 		return NoteType
 	case isBoneyard(line, prevType):
 		return BoneyardType
+	case isEmpty(line, prevType):
+		return EmptyType
 	default:
 		return UnknownType
 	}
@@ -371,7 +457,6 @@ func Parse(src []byte) (*Fountain, error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		currentType := getLineType(line, prevType)
-		fmt.Printf("DEBUG %q, %q, %s\n", typeName(prevType), typeName(currentType), line)
 		switch currentType {
 		case TitlePageType:
 			if strings.Contains(line, ":") {

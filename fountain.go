@@ -70,6 +70,52 @@ const (
 	RightAlignment
 )
 
+func typeName(t int) string {
+	switch t {
+	case UnknownType:
+		return "Unknown"
+	case EmptyType:
+		return "Empty"
+	case TitlePageType:
+		return "Title Page"
+	case SceneHeadingType:
+		return "Scene Heading"
+	case ActionType:
+		return "Action"
+	case CharacterType:
+		return "Character"
+	case DialogueType:
+		return "Dialogue"
+	case ParentheticalType:
+		return "Parenthetical"
+	case TransitionType:
+		return "Transition"
+	case LyricType:
+		return "Lyric"
+	case NoteType:
+		return "Note"
+	case BoneyardType:
+		return "Boneyard"
+	case UnderlineStyle:
+		return "Underline"
+	case ItalicStyle:
+		return "Italic"
+	case BoldStyle:
+		return "Bold"
+	case AllCapsStyle:
+		return "AllCaps"
+	case Strikethrough:
+		return "Strikethrough"
+	case CenterAlignment:
+		return "Center"
+	case LeftAlignment:
+		return "Left"
+	case RightAlignment:
+		return "Right"
+	}
+	return ""
+}
+
 type Fountain struct {
 	TitlePage []*Element
 	Elements  []*Element
@@ -203,15 +249,13 @@ func isDialogue(line string, prevType int) bool {
 func isTransition(line string, prevType int) bool {
 	//FIXME: We only have one pass so we don't know what
 	// the next type is, so hard coding it to assume it is EmptyType
-	nextType := EmptyType
-	line = strings.TrimSpace(line)
 	if strings.HasPrefix(line, ">") == true && strings.HasSuffix(line, "<") == false {
 		return true
 	}
 	if line != strings.ToUpper(line) {
 		return false
 	}
-	if strings.HasSuffix(line, "TO:") && prevType == EmptyType && nextType == EmptyType {
+	if strings.HasSuffix(line, "TO:") && prevType == EmptyType {
 		return true
 	}
 	// FIXME: What about final transitions like "FADE TO BLACK."?
@@ -327,7 +371,7 @@ func Parse(src []byte) (*Fountain, error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		currentType := getLineType(line, prevType)
-		fmt.Println("DEBUG scan line, type:", line, currentType)
+		fmt.Printf("DEBUG %q, %q, %s\n", typeName(prevType), typeName(currentType), line)
 		switch currentType {
 		case TitlePageType:
 			if strings.Contains(line, ":") {

@@ -32,8 +32,40 @@
 package fountain
 
 import (
+	"io/ioutil"
+	"os"
+	"path"
 	"testing"
 )
+
+func assertOK(t *testing.T, err error, msg string) {
+	if err != nil {
+		t.Errorf("%s, %s", err, msg)
+	}
+}
+
+func TestTypes(t *testing.T) {
+	src, err := ioutil.ReadFile(path.Join("testdata", "sample-01.fountain"))
+	assertOK(t, err, "ReadFile(testdata/sample-01.fountain)")
+
+	doc, err := Parse(src)
+	assertOK(t, err, "Parse(src)")
+
+	expected := []int{
+		TransitionType,
+		SceneHeadingType,
+		ActionType,
+		CharacterType,
+		ParentheticalType,
+		DialogueType,
+		TransitionType,
+	}
+	for i := 0; i < len(doc.Elements); i++ {
+		if doc.Elements[i].Type != expected[i] {
+			t.Errorf("expected %q, got %q for %q", typeName(expected[i]), typeName(doc.Elements[i].Type), doc.Elements[i].Content)
+		}
+	}
+}
 
 func TestMain(m *testing.M) {
 	// Setup everything, process flags, etc.

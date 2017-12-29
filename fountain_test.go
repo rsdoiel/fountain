@@ -53,16 +53,21 @@ func TestTypes(t *testing.T) {
 
 	expected := []int{
 		TransitionType,
+		EmptyType,
 		SceneHeadingType,
+		EmptyType,
 		ActionType,
+		EmptyType,
 		CharacterType,
 		ParentheticalType,
 		DialogueType,
+		EmptyType,
 		TransitionType,
 	}
 	for i := 0; i < len(doc.Elements); i++ {
 		if doc.Elements[i].Type != expected[i] {
 			t.Errorf("expected %q, got %q for %q", typeName(expected[i]), typeName(doc.Elements[i].Type), doc.Elements[i].Content)
+			t.FailNow()
 		}
 	}
 }

@@ -44,6 +44,47 @@ func assertOK(t *testing.T, err error, msg string) {
 	}
 }
 
+func TestDialogue(t *testing.T) {
+	src := []byte(`
+INT. LAB - DAY
+
+CHARLIE
+Bring that to me.
+
+(turns to Wilma)
+And you fetch the tongs.
+
+(Wilma turns and leaves the room)
+`)
+
+	expected := []int{
+		SceneHeadingType,
+		EmptyType,
+		CharacterType,
+		DialogueType,
+		EmptyType,
+		ParentheticalType,
+		DialogueType,
+		EmptyType,
+		ParentheticalType,
+	}
+
+	doc, err := Parse(src)
+	assertOK(t, err, "Parse(src)")
+
+	if doc == nil || doc.Elements == nil {
+		t.Errorf("Couldn't create doc.Elements from Parse()")
+		t.FailNow()
+	}
+	for i := 0; i < len(doc.Elements); i++ {
+		if doc.Elements[i].Type != expected[i] {
+			t.Errorf("expected %q, got %q for %q", typeName(expected[i]), typeName(doc.Elements[i].Type), doc.Elements[i].Content)
+			t.FailNow()
+		}
+	}
+
+}
+
 func TestTypes(t *testing.T) {
 	src, err := ioutil.ReadFile(path.Join("testdata", "sample-01.fountain"))
 	assertOK(t, err, "ReadFile(testdata/sample-01.fountain)")

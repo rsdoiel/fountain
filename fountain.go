@@ -42,7 +42,7 @@ const (
 	Version = `v0.0.1-dev`
 
 	// Types used in ElementSettings and Paragraph elements
-	UnknownType = iota
+	GeneralTextType = iota
 	EmptyType
 	TitlePageType
 	SceneHeadingType
@@ -98,8 +98,8 @@ func typeName(t int) string {
 	switch t {
 	case PageFeed:
 		return "Page Feed"
-	case UnknownType:
-		return "Unknown"
+	case GeneralTextType:
+		return "General Text"
 	case EmptyType:
 		return "Empty"
 	case TitlePageType:
@@ -360,7 +360,7 @@ func isAction(line string, prevType int) bool {
 	if len(line) == 0 {
 		return false
 	}
-	if isSceneHeading(line, prevType) == false && isCharacter(line, prevType) == false && isDialogue(line, prevType) == false {
+	if isSceneHeading(line, prevType) == false && isCharacter(line, prevType) == false && isDialogue(line, prevType) == false && isParenthetical(line, prevType) == false {
 		return true
 	}
 	return false
@@ -383,17 +383,10 @@ func isCharacter(line string, prevType int) bool {
 // and returns true if it looks like a Character or false otherwise
 func isParenthetical(line string, prevType int) bool {
 	line = strings.TrimSpace(line)
-	if strings.HasPrefix(line, "(") == false && strings.HasSuffix(line, ")") == false {
-		return false
-	}
-	switch prevType {
-	case CharacterType:
+	if strings.HasPrefix(line, "(") && strings.HasSuffix(line, ")") {
 		return true
-	case DialogueType:
-		return true
-	default:
-		return false
 	}
+	return false
 }
 
 // isDialogue evaluates a prev, current and next lines and returns true
@@ -496,11 +489,19 @@ func isBoneyardEnd(line string, prevType int) bool {
 	return false
 }
 
+// isPageFeed
+func isPageFeed(line string, prevType int) bool {
+	if strings.HasPrefix(strings.TrimSpace(line), "===") {
+		return true
+	}
+	return false
+}
+
 // getLineType evaluates the current line considering previous line type
 // and returns the current line type.
 func getLineType(line string, prevType int) int {
 	switch {
-	case strings.TrimSpace(line) == "===":
+	case isPageFeed(line, prevType):
 		return PageFeed
 	case isTitlePage(line, prevType):
 		return TitlePageType
@@ -527,7 +528,7 @@ func getLineType(line string, prevType int) int {
 	case isCenterAlignment(line, prevType):
 		return CenterAlignment
 	default:
-		return UnknownType
+		return GeneralTextType
 	}
 }
 
@@ -558,7 +559,7 @@ func Parse(src []byte) (*Fountain, error) {
 					elem.Type = TitlePageType
 					elem.Name = "Unknown"
 					elem.Content = line
-					document.TitlePage[i] = elem
+					document.TitlePage = append(document.TitlePage, elem)
 				} else {
 					elem := document.TitlePage[i]
 					elem.Content = elem.Content + "\n" + line

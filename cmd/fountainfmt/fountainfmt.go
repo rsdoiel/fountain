@@ -62,7 +62,7 @@ func main() {
 
 	// App Option
 	app.BoolVar(&debug, "debug", false, "display type and element content")
-	app.IntVar(&width, "w,width", fountain.MaxWidth, "set the width for the text")
+	app.IntVar(&width, "w,width", 65, "set the width for the text")
 
 	// Parse environment and options
 	app.Parse()

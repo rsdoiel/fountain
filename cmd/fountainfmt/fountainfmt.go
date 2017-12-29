@@ -37,6 +37,10 @@ Or alternatively
 	quiet                bool
 	inputFName           string
 	outputFName          string
+
+	// App Option
+	width int
+	debug bool
 )
 
 func main() {
@@ -51,10 +55,14 @@ func main() {
 	app.BoolVar(&showLicense, "l,license", false, "display license")
 	app.BoolVar(&showVersion, "v,version", false, "display version")
 	app.BoolVar(&generateMarkdownDocs, "generate-markdown-docs", false, "generate Markdown documentation")
-	app.BoolVar(&newLine, "nl,newline", false, "add a trailing newline")
+	app.BoolVar(&newLine, "nl,newline", true, "add a trailing newline")
 	app.BoolVar(&quiet, "quiet", false, "suppress error messages")
 	app.StringVar(&inputFName, "i,input", "", "set the input filename")
 	app.StringVar(&outputFName, "o,output", "", "set the output filename")
+
+	// App Option
+	app.BoolVar(&debug, "debug", false, "display type and element content")
+	app.IntVar(&width, "w,width", fountain.MaxWidth, "set the width for the text")
 
 	// Parse environment and options
 	app.Parse()
@@ -100,6 +108,13 @@ func main() {
 	cli.OnError(app.Eout, err, quiet)
 
 	//and then render as a string
+	fountain.MaxWidth = width
+	if debug {
+		for i, element := range screenplay.Elements {
+			fmt.Fprintf(app.Out, "%4d %02d %q\n", i, element.Type, element.Content)
+		}
+		os.Exit(0)
+	}
 	if newLine {
 		fmt.Fprintf(app.Out, "%s\n", screenplay.String())
 	} else {

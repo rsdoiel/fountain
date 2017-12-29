@@ -5,11 +5,11 @@
 
 ## Next
 
-+ [ ] word wrap for dialogue
++ [ ] handle unlabeled title pages
+
 
 ## Someday, Maybe
 
-+ [ ] handle unlabeled title pages
 + [ ] handle general text (outside of notes, boneyard)
 + [ ] definable heading prefixes
 + [ ] reports on screenplay 
@@ -18,4 +18,5 @@
 ## Completed
 
 + [x] Write Parse(src []byte) returning a Fountain Struct and error
++ [x] word wrap for dialogue
 

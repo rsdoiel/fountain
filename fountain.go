@@ -67,6 +67,9 @@ const (
 	CenterAlignment
 	LeftAlignment
 	RightAlignment
+
+	// Feeds
+	PageFeed
 )
 
 var (
@@ -93,6 +96,8 @@ type Element struct {
 
 func typeName(t int) string {
 	switch t {
+	case PageFeed:
+		return "Page Feed"
 	case UnknownType:
 		return "Unknown"
 	case EmptyType:
@@ -137,16 +142,6 @@ func typeName(t int) string {
 	return ""
 }
 
-// alignRight will apply left padding such as used to format a transition.
-func alignRight(line string, width int) string {
-	l := len(line)
-	if l >= width {
-		return line
-	}
-	padL := width - l
-	return strings.Repeat(" ", padL) + line
-}
-
 // wordWrap will try to break line at a suitable place if they are equal or
 // longer than width.
 func wordWrap(line string, width int) string {
@@ -175,10 +170,11 @@ func wordWrap(line string, width int) string {
 
 // blockWrap will add left/right padding and wrap the text in the block
 func blockWrap(line, padding string, width int) string {
+	// NOTE: We need to adjust width to reflect padding on right
+	width = width - len(padding)
 	if len(padding)+len(line) <= width {
 		return padding + line
 	}
-	width = width - len(padding)
 	buf := []string{}
 	words := strings.Split(line, " ")
 	l := 0
@@ -199,6 +195,51 @@ func blockWrap(line, padding string, width int) string {
 	return strings.Join(buf, "") + "\n"
 }
 
+// centerAlignText center align text given a line and width
+func centerAlignText(line string, width int) string {
+	if len(line) >= width {
+		return line
+	}
+	padLength := (width - len(line)) / 2
+	return strings.Repeat(" ", padLength) + line
+}
+
+func leftAlignText(line string, width int) string {
+	src := []string{}
+	if strings.Contains(line, "\n") == false {
+		return strings.TrimSpace(line)
+	}
+	lines := strings.Split(line, "\n")
+	for _, line := range lines {
+		src = append(src, strings.TrimSpace(line))
+	}
+	return strings.Join(src, "\n")
+}
+
+func rightAlignText(line string, width int) string {
+	src := []string{}
+	if strings.Contains(line, "\n") == false {
+		line = strings.TrimSpace(line)
+		l := len(line)
+		if l >= width {
+			return line
+		}
+		return strings.Repeat(" ", width-l) + line
+	}
+	lines := strings.Split(line, "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		l := len(line)
+		if l >= width {
+			src = append(src, line)
+		} else {
+			src = append(src, strings.Repeat(" ", width-l), line)
+		}
+
+	}
+	return strings.Join(src, "\n")
+}
+
 // format considers elem.Type and formatting output
 func format(element *Element) string {
 	switch element.Type {
@@ -214,13 +255,16 @@ func format(element *Element) string {
 		return blockWrap(element.Content, strings.Repeat("    ", 2), MaxWidth)
 	case TransitionType:
 		s := strings.TrimSpace(element.Content)
-		if strings.HasSuffix(s, ".") {
-			return s
+		if strings.HasSuffix(s, ".") || strings.HasSuffix(s, "IN:") {
+			return leftAlignText(s, MaxWidth)
 		}
-		if strings.HasSuffix(s, "IN:") {
-			return s
-		}
-		return alignRight(strings.ToUpper(strings.TrimSpace(element.Content)), MaxWidth)
+		return rightAlignText(strings.ToUpper(element.Content), MaxWidth)
+	case CenterAlignment:
+		return centerAlignText(element.Content, MaxWidth)
+	case LeftAlignment:
+		return leftAlignText(element.Content, MaxWidth)
+	case RightAlignment:
+		return rightAlignText(element.Content, MaxWidth)
 	default:
 		return element.Content
 	}
@@ -273,6 +317,15 @@ func isEmpty(line string, prevType int) bool {
 		return false
 	}
 	if len(strings.TrimSpace(line)) == 0 {
+		return true
+	}
+	return false
+}
+
+// isCenterAlignment evaluates the current line to see if it is a Center Alignment type
+func isCenterAlignment(line string, prevType int) bool {
+	line = strings.TrimSpace(line)
+	if strings.HasPrefix(line, ">") && strings.HasSuffix(line, "<") {
 		return true
 	}
 	return false
@@ -447,6 +500,8 @@ func isBoneyardEnd(line string, prevType int) bool {
 // and returns the current line type.
 func getLineType(line string, prevType int) int {
 	switch {
+	case strings.TrimSpace(line) == "===":
+		return PageFeed
 	case isTitlePage(line, prevType):
 		return TitlePageType
 	case isTransition(line, prevType):
@@ -469,6 +524,8 @@ func getLineType(line string, prevType int) int {
 		return BoneyardType
 	case isEmpty(line, prevType):
 		return EmptyType
+	case isCenterAlignment(line, prevType):
+		return CenterAlignment
 	default:
 		return UnknownType
 	}

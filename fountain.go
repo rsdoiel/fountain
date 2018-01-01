@@ -142,6 +142,11 @@ func typeName(t int) string {
 	return ""
 }
 
+// TypeName returns the string describing the type of Fountain Element.
+func (elem *Element) TypeName() string {
+	return typeName(elem.Type)
+}
+
 // wordWrap will try to break line at a suitable place if they are equal or
 // longer than width.
 func wordWrap(line string, width int) string {

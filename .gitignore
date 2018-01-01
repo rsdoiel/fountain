@@ -19,5 +19,11 @@ testout/
 testdata/Big%20Fish.fdx
 testdata/Brick%20&%20Steel.fdx
 testdata/The%20Last%20Birthday%20Card.fdx
+testdata/Big%20Fish.fountain
+testdata/Big%20Fish.pdf
+testdata/Brick%20&%20Steel.fountain
+testdata/Brick%20&%20Steel.pdf
+testdata/The%20Last%20Birthday%20Card.fountain
+testdata/The%20Last%20Birthday%20Card.pdf
 bin/
 dist/

@@ -32,6 +32,7 @@
 package fountain
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -58,15 +59,15 @@ And you fetch the tongs.
 `)
 
 	expected := []int{
-		SceneHeadingType,
-		EmptyType,
-		CharacterType,
-		DialogueType,
-		EmptyType,
-		ParentheticalType,
-		DialogueType,
-		EmptyType,
-		ParentheticalType,
+		SceneHeadingType,  // INT. LAB - DAY
+		EmptyType,         //
+		CharacterType,     // CHARLIE
+		DialogueType,      // Bring that to me.
+		EmptyType,         //
+		ParentheticalType, // (turns to Wilma)
+		DialogueType,      // And you fetch the tongs.
+		EmptyType,         //
+		ParentheticalType, // (Wilma turns and leaves the room)
 	}
 
 	doc, err := Parse(src)
@@ -92,18 +93,40 @@ func TestTypes(t *testing.T) {
 	doc, err := Parse(src)
 	assertOK(t, err, "Parse(src)")
 
+	/*
+	   !FADE IN:
+
+	   EXT. LIBRARY - DAY
+
+	   A PROGRAMMER typing at an old laptop
+
+	   PROGRAMMER
+	   (excited)
+	   Eureka!
+
+	   > FADE TO BLACK.
+	*/
 	expected := []int{
-		TransitionType,
-		EmptyType,
-		SceneHeadingType,
-		EmptyType,
-		ActionType,
-		EmptyType,
-		CharacterType,
-		ParentheticalType,
-		DialogueType,
-		EmptyType,
-		TransitionType,
+		TransitionType,    // "!FADE IN:"
+		EmptyType,         // ""
+		SceneHeadingType,  // "EXT. LIBRARY - DAY"
+		EmptyType,         // ""
+		ActionType,        // "A PROGRAMMER typing at an old laptop"
+		EmptyType,         // ""
+		CharacterType,     // "PROGRAMMER"
+		ParentheticalType, // "(excited)"
+		DialogueType,      // "Eureka!"
+		EmptyType,         // ""
+		TransitionType,    // "> FADE TO BLACK."
+		EmptyType,         // ""
+	}
+
+	if len(doc.Elements) > len(expected) {
+		t.Errorf("Got more elements than expected, %+v", doc.Elements)
+		for _, elem := range doc.Elements {
+			fmt.Fprintf(os.Stderr, "%s %q\n", typeName(elem.Type), elem.Content)
+		}
+		t.FailNow()
 	}
 	for i := 0; i < len(doc.Elements); i++ {
 		if doc.Elements[i].Type != expected[i] {

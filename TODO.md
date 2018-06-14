@@ -11,6 +11,7 @@
 ## Someday, Maybe
 
 + [ ] handle general text (outside of notes, boneyard)
+    + this could be handled like front matter in Markdown
 + [ ] definable heading prefixes
 + [ ] reports on screenplay 
 + [ ] fountain2pdf

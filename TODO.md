@@ -6,11 +6,12 @@
 ## Next
 
 + [ ] handle unlabeled title pages
-+ [ ] write and fountain2html using [scrippets](https://fountain.io/scrippets) approach
++ [ ] Write and Fountain2HTML using [scrippets](https://fountain.io/scrippets) approach
 
 
 ## Someday, Maybe
 
++ [ ] Add support for Markdown front matter for additiona metadata processing
 + [ ] handle general text (outside of notes, boneyard)
     + this could be handled like front matter in Markdown
 + [ ] definable heading prefixes

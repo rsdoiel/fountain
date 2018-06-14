@@ -6,6 +6,7 @@
 ## Next
 
 + [ ] handle unlabeled title pages
++ [ ] write and fountain2html using [scrippets](https://fountain.io/scrippets) approach
 
 
 ## Someday, Maybe
@@ -15,7 +16,6 @@
 + [ ] definable heading prefixes
 + [ ] reports on screenplay 
 + [ ] fountain2pdf
-+ [ ] fountain2html using John Augusts' [screenbox CSS](https://johnaugust.com/2008/scrippets-php-and-a-call-to-coders)
 
 ## Completed
 

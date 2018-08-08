@@ -20,9 +20,14 @@ build: fountain.go cmd/fountainfmt/fountainfmt.go
 test:
 	go test
 
+man: build
+	mkdir -p man/man1
+	bin/fountainfmt -generate-manpage | nroff -Tutf8 -man > man/man1/fountainfmt.1
+
 clean: 
 	if [ -d bin ]; then rm -fR bin; fi
 	if [ -d dist ]; then rm -fR dist; fi
+	if [ -d man ]; then rm -fR man; fi
 
 website:
 	./mk-website.bash

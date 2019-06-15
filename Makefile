@@ -30,7 +30,7 @@ install:
 dist/linux-amd64:
 	mkdir -p dist/bin
 	env GOOS=linux GOARCH=amd64 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
-	cd dist && zip -r $(PROJECT)-$(VERSION)-linix-amd64.zip README.md LICENSE INSTSALL.md bin/*
+	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-amd64.zip README.md LICENSE INSTSALL.md bin/*
 	rm -fR dist/bin
 
 dist/windows-amd64:
@@ -61,6 +61,8 @@ distribute_docs:
 	mkdir -p dist
 	cp -v README.md dist/
 	cp -v LICENSE dist/
+
+release: distribute_docs dist/linux-amd64 dist/windows-amd64 dist/macosx-amd64 dist/raspbian-arm7 dist/linux-arm64
 
 clean: 
 	if [ -d bin ]; then rm -fR bin; fi

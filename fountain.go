@@ -5,7 +5,7 @@
 //
 // BSD 2-Clause License
 //
-// Copyright (c) 2017, R. S. Doiel
+// Copyright (c) 2019, R. S. Doiel
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -39,7 +39,7 @@ import (
 )
 
 const (
-	Version = `v0.0.1-dev`
+	Version = `v0.0.1`
 
 	// Types used in ElementSettings and Paragraph elements
 	GeneralTextType = iota

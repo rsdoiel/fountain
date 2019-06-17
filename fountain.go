@@ -609,3 +609,12 @@ func ParseFile(fname string) (*Fountain, error) {
 	}
 	return Parse(src)
 }
+
+// Run takes a byte split and returns an HTML fragment appropriate
+// to use as a Scrippet with John Augusts' CSS
+// https://fountain.io/_css/scrippets.css
+func Run(input []byte, opts ...Option) []byte {
+	//FIXME: Not implemented.
+	// opts should cover including scrippets CSS or not inline
+	return nil
+}

@@ -4,5 +4,5 @@
 + [LICENSE](license.html)
 + [Documentation](docs/)
 + [Test Data](testdata.html)
-+ [Github](https://github.com/rsdoiel/fdx)
++ [GitHub](https://github.com/rsdoiel/fountain)
 

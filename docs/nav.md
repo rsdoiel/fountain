@@ -2,7 +2,7 @@
 + [Home](/)
 + [README](../)
 + [LICENSE](../license.html)
-+ [Test Data](../testdata.html)
 + [Documentation](./)
-+ [Github](https://github.com/rsdoiel/fdx)
++ [Test Data](../testdata.html)
++ [Github](https://github.com/rsdoiel/fountain)
 

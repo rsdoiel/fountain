@@ -14,8 +14,9 @@ ifeq ($(OS), Windows)
 	EXT = .exe
 endif
 
-build: fountain.go cmd/fountainfmt/fountainfmt.go
+build:  fetch_scrippets_css fountain.go cmd/fountainfmt/fountainfmt.go cmd/fountain2html/fountain2html.go
 	go build -o bin/fountainfmt$(EXT) cmd/fountainfmt/fountainfmt.go
+	go build -o bin/fountain2html$(EXT) cmd/fountain2html/fountain2html.go
 
 test:
 	go test
@@ -23,37 +24,50 @@ test:
 man: build
 	mkdir -p man/man1
 	bin/fountainfmt -generate-manpage | nroff -Tutf8 -man > man/man1/fountainfmt.1
+	bin/fountain2html -generate-manpage | nroff -Tutf8 -man > man/man1/fountain2html.1
 
 install:
 	env GOBIN=$(HOME)/bin go install cmd/fountainfmt/fountainfmt.go
+	env GOBIN=$(HOME)/bin go install cmd/fountain2html/fountain2html.go
+
+fetch_scrippets_css:
+	if [ ! -f css/scrippets.css ]; then \
+		curl -L -o css/scrippets.css \
+		"http://johnaugust.com/wp-content/plugins/wp-scrippets/scrippets.css?v2.0"; fi
+
 
 dist/linux-amd64:
 	mkdir -p dist/bin
 	env GOOS=linux GOARCH=amd64 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
+	env GOOS=linux GOARCH=amd64 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
 	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-amd64.zip README.md LICENSE INSTSALL.md bin/*
 	rm -fR dist/bin
 
 dist/windows-amd64:
 	mkdir -p dist/bin
 	env GOOS=windows GOARCH=amd64 go build -o dist/bin/fountainfmt.exe cmd/fountainfmt/fountainfmt.go
+	env GOOS=windows GOARCH=amd64 go build -o dist/bin/fountain2html.exe cmd/fountain2html/fountain2html.go
 	cd dist && zip -r $(PROJECT)-$(VERSION)-windows-amd64.zip README.md LICENSE INSTSALL.md bin/*
 	rm -fR dist/bin
 
 dist/macosx-amd64:
 	mkdir -p dist/bin
 	env GOOS=darwin GOARCH=amd64 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
+	env GOOS=darwin GOARCH=amd64 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
 	cd dist && zip -r $(PROJECT)-$(VERSION)-macosx-amd64.zip README.md LICENSE INSTSALL.md bin/*
 	rm -fR dist/bin
 
 dist/raspbian-arm7:
 	mkdir -p dist/bin
 	env GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
+	env GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
 	cd dist && zip -r $(PROJECT)-$(VERSION)-raspbian-arm7.zip README.md LICENSE INSTSALL.md bin/*
 	rm -fR dist/bin
 
 dist/linux-arm64:
 	mkdir -p dist/bin
 	env GOOS=linux GOARCH=arm64 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
+	env GOOS=linux GOARCH=arm64 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
 	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-arm64.zip README.md LICENSE INSTSALL.md bin/*
 	rm -fR dist/bin
 

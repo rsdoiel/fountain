@@ -34,12 +34,13 @@ package fountain
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"strings"
 )
 
 const (
-	Version = `v0.0.1`
+	Version = `v0.0.2`
 
 	// Types used in ElementSettings and Paragraph elements
 	GeneralTextType = iota
@@ -73,7 +74,10 @@ const (
 )
 
 var (
-	MaxWidth = 64
+	AsHTMLPage = false
+	MaxWidth   = 64
+	InlineCSS  = false
+	CSS        = false
 )
 
 // Fountain is the document container. It is the type returned by Parse() and ParseFile()
@@ -610,11 +614,55 @@ func ParseFile(fname string) (*Fountain, error) {
 	return Parse(src)
 }
 
+// createElement assembles an HTML element with provided classs and content
+func createElement(elem string, classes []string, content string) []byte {
+	s := fmt.Sprintf(`<%s class=%q>%s</%s>`, elem, strings.Join(classes, " "), content, elem)
+	return []byte(s)
+}
+
+// ToHTML converts a Fountain document based on the Options prvided.
+// @param opt *Options a populate struct of options this package supports
+// @return []byte of HTML
+func (doc *Fountain) ToHTML() []byte {
+	var (
+		out []byte
+	)
+	//FIXME: Handle .AsHTMLPage
+	//FIXME: Handle .IncludeLinkCSS
+	//FIXME: Handle .IncludeInLineCSS
+	//FIXME: Really should build out a DOM structure then render the DOM structure ...
+	if doc.TitlePage != nil {
+		for _, elem := range doc.TitlePage {
+			out = append(out, createElement("div", []string{"fountain", "title-page"}, elem.Content)...)
+		}
+	}
+	if doc.Elements != nil {
+		for _, elem := range doc.Elements {
+			className := typeName(elem.Type)
+			if className != "" {
+				className = strings.ToLower(strings.Replace(className, " ", "-", -1))
+				out = append(out, createElement("div", []string{"fountain", className}, elem.Content)...)
+			} else {
+				out = append(out, createElement("div", []string{"fountain"}, elem.Content)...)
+			}
+
+		}
+	}
+	return out
+}
+
 // Run takes a byte split and returns an HTML fragment appropriate
 // to use as a Scrippet with John Augusts' CSS
 // https://fountain.io/_css/scrippets.css
-func Run(input []byte, opts ...Option) []byte {
-	//FIXME: Not implemented.
-	// opts should cover including scrippets CSS or not inline
-	return nil
+func Run(input []byte) ([]byte, error) {
+	var (
+		out []byte
+	)
+	doc, err := Parse(input)
+	if err != nil {
+		out = append(out, input...)
+	} else {
+		out = append(out, doc.ToHTML()...)
+	}
+	return out, err
 }

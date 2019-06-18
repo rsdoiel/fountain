@@ -1,38 +1,10 @@
 
-# USAGE
+# fountain
 
-	fountainfmt [OPTIONS]
+The Go fountain package comes with two command line demonstration
+programs. 
 
-## SYNOPSIS
-
-fountainfmt is a command line program that reads an fountain document and pretty prints it.
-
-
-## OPTIONS
-
-```
-    -debug                    display type and element content
-    -generate-markdown-docs   generate Markdown documentation
-    -h, -help                 display help
-    -i, -input                set the input filename
-    -l, -license              display license
-    -nl, -newline             add a trailing newline
-    -o, -output               set the output filename
-    -quiet                    suppress error messages
-    -v, -version              display version
-    -w, -width                set the width for the text
-```
+1. [fountainfmt](fountainfmt.html) - a fountain pretty printer
+2. [fountain2html](fountain2html.html) - a fountain to HTML converter
 
 
-## EXAMPLES
-
-Pretty print *screenplay.txt* saving it as *screenplay.fountain*.
-
-    fountainfmt -i screenplay.txt -o screenplay.fountain
-
-Or alternatively
-
-    cat screenplay.txt | foutnainfmt > screenplay.fountain
-
-
-fountainfmt v0.0.1-dev

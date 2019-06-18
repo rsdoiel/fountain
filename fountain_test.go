@@ -134,6 +134,7 @@ func TestTypes(t *testing.T) {
 			t.FailNow()
 		}
 	}
+
 }
 
 func TestMain(m *testing.M) {

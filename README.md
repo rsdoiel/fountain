@@ -3,8 +3,14 @@
 
 # fountain
 
-_fountain_ is an experimental Golang package for working with Fountain formatted Screenplays. 
-_fountain_ is supported by many programs (see list at [fountain.io](https://fountain.io)).  
-This package also includes a demonstration command line program called [fountainfmt](docs/) 
-which pretty print a fountain document.
+_fountain_ is an experimental Golang package for working with Fountain formatted Screenplay documents. It provides a parser and HTML renderer. 
+_fountain_ format is supported by many programs (see list at [fountain.io](https://fountain.io)).  
+This package also includes a demonstration command line programs
+
+[fountainfmt](docs/fountainfmt.html) 
+: A fountain document pretty printer
+
+[fountain2html](docs/fountain2html.html)
+: A fountain to HTML converter
+
 

@@ -16,7 +16,7 @@ var (
 	scrippetsCSSUrl = "https://johnaugust.com/wp-content/plugins/wp-scrippets/scrippets.css?v2.0"
 )
 
-func getScrippetsCSS() []byte {
+func getScrippetsCSS() string {
 	var (
 		scrippetsCSS string
 	)
@@ -36,22 +36,19 @@ func getScrippetsCSS() []byte {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Printf("%s", err)
-			s := fmt.Sprintf(`<link rel="stylesheet" href=%q>`, scrippetsCSSUrl)
-			return []byte(s)
+			return fmt.Sprintf(`<link rel="stylesheet" href=%q>`, scrippetsCSSUrl)
 		}
 		err = ioutil.WriteFile("scrippets.css", body, 0666)
-		return body
+		return fmt.Sprintf("%s", body)
 	}
 	src, err := ioutil.ReadFile(scrippetsCSS)
 	if err != nil {
 		log.Printf("%s", err)
-		s := fmt.Sprintf(`<link rel="stylesheet" href=%q>`, scrippetsCSSUrl)
-		return []byte(s)
+		return fmt.Sprintf(`<link rel="stylesheet" href=%q>`, scrippetsCSSUrl)
 	}
-	return src
+	return fmt.Sprintf("%s", src)
 }
 
-func getScrippetsCSSLink() []byte {
-	s := fmt.Sprintf(`<link rel="stylesheet" href=%q>`, scrippetsCSSUrl)
-	return []byte(s)
+func getScrippetsCSSLink() string {
+	return fmt.Sprintf(`<link rel="stylesheet" href=%q>`, scrippetsCSSUrl)
 }

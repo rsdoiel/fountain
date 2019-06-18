@@ -4,11 +4,13 @@
 ## Bugs
 
 + [ ] Transition follow by transition at end of script treats the second transition as action, see sample-05.fountain, noticed in HTML output
++ [ ] sample-05.fountain has the character "DOG" line identified as "dialogue"
+
 
 ## Next
 
 + [ ] handle unlabeled title pages
-+ [ ] Write and Fountain2HTML using [scrippets](https://fountain.io/scrippets) approach
++ [x] Write and Fountain2HTML using [scrippets](https://fountain.io/scrippets) approach
 
 
 ## Someday, Maybe

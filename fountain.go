@@ -40,44 +40,91 @@ import (
 )
 
 const (
+	// Version of this package
 	Version = `v0.0.2`
 
+	//
 	// Types used in ElementSettings and Paragraph elements
-	GeneralTextType = iota
-	EmptyType
-	TitlePageType
-	SceneHeadingType
-	ActionType
-	CharacterType
-	DialogueType
-	ParentheticalType
-	TransitionType
-	ShotType
-	LyricType
-	NoteType
-	BoneyardType
+	//
 
-	// Style
+	// GeneralTextType - not specific formatting, treat as plain text
+	GeneralTextType = iota
+	// EmptyType An empty line(s), block of whitepace, can occur on title page or script page(s)
+	EmptyType
+	// TitlePageType - something that only happens on the title page.
+	// NOTE: Title page elents have a .Name value which is my best guess about the content.
+	TitlePageType
+	// SceneHeadingType - exists in the script pages, it is for scene headings
+	SceneHeadingType
+	// ActionType - designates an action block in the script page(s)
+	ActionType
+	// CharacterType - designates a CHARACTER heading for dialog
+	CharacterType
+	// DialogueType - holds a block of dialogue
+	DialogueType
+	// ParentheticalType - holds any parenthetical statement after CharacterType and before DialogueType
+	ParentheticalType
+	// TransitionType - scene transition instructions, these are minimal in most scripts now, e.g. FADE IN:, FADE TO BLACK:, THE END.
+	TransitionType
+	// ShotType - Goes in the screen heading line
+	ShotType
+	// LyricType - holds lyrics to be sung
+	LyricType
+	// NoteType - holds a script note
+	NoteType
+	// BoneyardType - blocks of cut material that haven't been removed
+	BoneyardType
+	// SectionType - is a markdown like title/heading, not normally display in output but used for navigation in text
+	SectionType
+	// SynopsisType - used as internal documentation, not normally displayed in output
+	SynopsisType
+
+	//
+	// In line Styling, important in hinting for CSS generation, some text modifications in pretty printing
+	//
+
+	// UnderlineStyle - show underlined, in CSS "text-decoration:underline;"
 	UnderlineStyle
+	// ItalicStyle - show as italics (e.g. <i>, <em> in HTML)
 	ItalicStyle
+	// BoldStyle - show as boldface or strong (e.g. <b>, <strong> in HTML)
 	BoldStyle
+	// AllCapsStyle - will transform the text to uppercase, could also trigger CSS "text-transform: uppercase;"
 	AllCapsStyle
+	// Strikethrough - generates strikethrough in CSS
 	Strikethrough
 
 	// Alignments
+
+	// CenterAlignment - center text or block
 	CenterAlignment
+	// LeftAlignment - left align text or block
 	LeftAlignment
+	// RightAlignment - right align text of block
 	RightAlignment
 
-	// Feeds
+	// PageFeed - inject a page feed or <hr> in HTML
 	PageFeed
 )
 
 var (
+	// MaxWidth used to set width for Fountain text output in String()
+	MaxWidth = 64
+	// AsHTMLPage if true generate the HTML header and footer blocks
 	AsHTMLPage = false
-	MaxWidth   = 64
-	InlineCSS  = false
-	CSS        = false
+	// InlineCSS sets behavior of including style elements with CSS in ToHTML()
+	InlineCSS = false
+	// LinkCSS sets behavior of including link element pointing to CSS file in ToHTML()
+	LinkCSS = false
+	// CSS holds the filename to use generating CSS links or reading
+	// in a customized version of the CSS. Defaults to "fountain.css".
+	CSS = "fountain.css"
+	// ShowSection - preserve section markers in output (e.g. when pretty printing a working draft)
+	ShowSection = false
+	// ShowSynopsis - preserve synopsis in output (e.g. when pretty printing a working draft)
+	ShowSynopsis = false
+	// ShowNotes - preserve notes in output (e.g. when pretty printing a working draft)
+	ShowNotes = false
 )
 
 // Fountain is the document container. It is the type returned by Parse() and ParseFile()
@@ -142,6 +189,10 @@ func typeName(t int) string {
 		return "Left"
 	case RightAlignment:
 		return "Right"
+	case SectionType:
+		return "Section"
+	case SynopsisType:
+		return "Synopsis"
 	}
 	return ""
 }
@@ -269,6 +320,9 @@ func (element *Element) String() string {
 		if strings.HasSuffix(s, ".") || strings.HasSuffix(s, "IN:") {
 			return leftAlignText(s, MaxWidth)
 		}
+		if strings.HasPrefix(s, ">") && strings.HasSuffix(s, "<") {
+			return centerAlignText(strings.ToUpper(element.Content), MaxWidth)
+		}
 		return rightAlignText(strings.ToUpper(element.Content), MaxWidth)
 	case CenterAlignment:
 		return centerAlignText(element.Content, MaxWidth)
@@ -276,6 +330,23 @@ func (element *Element) String() string {
 		return leftAlignText(element.Content, MaxWidth)
 	case RightAlignment:
 		return rightAlignText(element.Content, MaxWidth)
+	case NoteType:
+		if ShowNotes {
+			return element.Content
+		}
+		return ""
+	case SectionType:
+		if ShowSection {
+			return element.Content
+		}
+		return ""
+	case SynopsisType:
+		if ShowSynopsis {
+			return element.Content
+		}
+		return ""
+	case PageFeed:
+		return "\f"
 	default:
 		return element.Content
 	}
@@ -284,8 +355,15 @@ func (element *Element) String() string {
 // createElement assembles an HTML element with provided classs and content
 func createElement(elem string, classes []string, content string) string {
 	if len(classes) > 0 {
+		if elem == "hr" || elem == "p" {
+			return fmt.Sprintf("<%s class=%q>\n", elem, strings.Join(classes, " "))
+
+		}
 		return fmt.Sprintf("<%s class=%q>%s</%s>\n", elem, strings.Join(classes, " "), content, elem)
 
+	}
+	if elem == "hr" || elem == "p" {
+		return fmt.Sprintf("<%s>", elem)
 	}
 	return fmt.Sprintf("<%s>%s</%s>\n", elem, content, elem)
 }
@@ -293,36 +371,55 @@ func createElement(elem string, classes []string, content string) string {
 // ToHTML considers elem.Type and formatting output
 func (element *Element) ToHTML() string {
 	switch element.Type {
+	case TitlePageType:
+		switch strings.ToLower(element.Name) {
+		case "title":
+			return createElement("div", []string{"title"}, element.Content)
+		case "author":
+			return createElement("div", []string{"author"}, element.Content)
+		case "draft date":
+			return createElement("div", []string{"draft-date"}, element.Content)
+		case "date":
+			return createElement("div", []string{"draft-date"}, element.Content)
+		case "copyright":
+			return createElement("div", []string{"copyright"}, element.Content)
+		case "contact":
+			return createElement("address", []string{"contact"}, element.Content)
+		default:
+			return createElement("div", []string{"general-text"}, element.Content)
+		}
 	case SceneHeadingType:
-		return createElement("div", []string{"fountain", "scene-heading"}, strings.ToUpper(strings.TrimSpace(element.Content)))
+		return createElement("div", []string{"scene-heading"}, strings.ToUpper(strings.TrimSpace(element.Content)))
 	case ActionType:
-		return createElement("div", []string{"fountain", "action"}, element.Content)
+		return createElement("div", []string{"action"}, element.Content)
 	case CharacterType:
-		return createElement("div", []string{"fountain", "character"}, strings.ToUpper(strings.TrimSpace(element.Content)))
+		return createElement("div", []string{"character"}, strings.ToUpper(strings.TrimSpace(element.Content)))
 	case ParentheticalType:
-		return createElement("div", []string{"fountain", "parenthetical"}, strings.TrimSpace(element.Content))
+		return createElement("div", []string{"parenthetical"}, strings.TrimSpace(element.Content))
 	case DialogueType:
-		return createElement("div", []string{"fountain", "dialogue"}, element.Content)
+		return createElement("div", []string{"dialogue"}, element.Content)
 	case TransitionType:
 		s := strings.TrimSpace(element.Content)
 		if strings.HasPrefix(s, ">") && strings.HasSuffix(s, "<") {
-			return createElement("div", []string{"fountain", "transition", "centered"}, strings.TrimPrefix(strings.TrimSuffix(s, "<"), ">"))
+			return createElement("div", []string{"transition", "centered"}, strings.TrimPrefix(strings.TrimSuffix(s, "<"), ">"))
 		}
 		if strings.HasPrefix(s, ">") {
-			return createElement("div", []string{"fountain", "transition"}, strings.TrimPrefix(s, ">"))
+			return createElement("div", []string{"transition", "right-align"}, strings.TrimPrefix(s, ">"))
 		}
 		if strings.HasSuffix(s, ".") || strings.HasSuffix(s, "IN:") {
-			return createElement("div", []string{"fountain", "transition", "left-align"}, s)
+			return createElement("div", []string{"transition", "left-align"}, s)
 		}
-		return createElement("div", []string{"fountain", "transition", "right-align"}, strings.ToUpper(element.Content))
+		return createElement("div", []string{"transition", "right-align"}, strings.ToUpper(element.Content))
 	case CenterAlignment:
-		return createElement("div", []string{"fountain", "centered"}, element.Content)
+		return createElement("div", []string{"centered"}, element.Content)
 	case LeftAlignment:
-		return createElement("div", []string{"fountain", "left-align"}, element.Content)
+		return createElement("div", []string{"left-align"}, element.Content)
 	case RightAlignment:
-		return createElement("div", []string{"fountain", "right-align"}, element.Content)
+		return createElement("div", []string{"right-align"}, element.Content)
+	case PageFeed:
+		return createElement("hr", []string{"page-feed"}, "")
 	default:
-		return createElement("span", []string{"fountain", strings.ToLower(strings.Replace(typeName(element.Type), " ", "-", -1))}, element.Content)
+		return createElement("div", []string{strings.ToLower(strings.Replace(typeName(element.Type), " ", "-", -1))}, element.Content)
 	}
 }
 
@@ -340,8 +437,23 @@ func (doc *Fountain) String() string {
 	}
 	if doc.Elements != nil {
 		for _, elem := range doc.Elements {
-			s = elem.String()
-			src = append(src, s)
+			switch elem.Type {
+			case NoteType:
+				if ShowNotes {
+					src = append(src, elem.Content)
+				}
+			case SectionType:
+				if ShowSection {
+					src = append(src, elem.Content)
+				}
+			case SynopsisType:
+				if ShowSynopsis {
+					src = append(src, elem.Content)
+				}
+			default:
+				s = elem.String()
+				src = append(src, s)
+			}
 		}
 	}
 	return strings.Join(src, "\n")
@@ -413,8 +525,6 @@ func isAction(line string, prevType int) bool {
 
 // isCharacter evaluates a prev, current and next lines and returns true if it looks like a Character or false otherwise
 func isCharacter(line string, prevType int) bool {
-	//FIXME: spec requires looking ahead an additional line
-	// we only have a prevType known so assuming nextType == EmptyType
 	if strings.HasPrefix(line, "@") {
 		return true
 	}
@@ -449,15 +559,18 @@ func isDialogue(line string, prevType int) bool {
 
 // isTransition evaluates a line plus prev/next bool
 func isTransition(line string, prevType int) bool {
-	//FIXME: We only have one pass so we don't know what
-	// the next type is, so hard coding it to assume it is EmptyType
-	if strings.HasPrefix(line, ">") == true && strings.HasSuffix(line, "<") == false {
+	// NOTE: an explicit transition starts with a '>'
+	if strings.HasPrefix(line, ">") == true {
 		return true
 	}
 	if strings.HasSuffix(line, "TO:") || strings.HasSuffix(line, "IN:") {
 		return true
 	}
-	if strings.HasPrefix(line, "FADE TO") {
+	line = strings.TrimSpace(line)
+	if strings.HasPrefix(line, "FADE TO") || strings.HasPrefix(line, ">") {
+		return true
+	}
+	if strings.Contains(line, "THE END.") {
 		return true
 	}
 	return false
@@ -536,7 +649,23 @@ func isBoneyardEnd(line string, prevType int) bool {
 
 // isPageFeed
 func isPageFeed(line string, prevType int) bool {
-	if strings.HasPrefix(strings.TrimSpace(line), "===") {
+	if strings.Compare(strings.TrimSpace(line), "===") == 0 {
+		return true
+	}
+	return false
+}
+
+// isSection (not normally displayed in output)
+func isSection(line string, prevType int) bool {
+	if strings.HasPrefix(strings.TrimSpace(line), "#") {
+		return true
+	}
+	return false
+}
+
+// isSynopsis (not normally displayed in output)
+func isSynopsis(line string, prevType int) bool {
+	if strings.HasPrefix(strings.TrimSpace(line), "=") {
 		return true
 	}
 	return false
@@ -550,8 +679,12 @@ func getLineType(line string, prevType int) int {
 		return PageFeed
 	case isTitlePage(line, prevType):
 		return TitlePageType
-	case isTransition(line, prevType):
-		return TransitionType
+	case isSection(line, prevType):
+		return SectionType
+	case isSynopsis(line, prevType):
+		return SynopsisType
+	case isNote(line, prevType):
+		return NoteType
 	case isSceneHeading(line, prevType):
 		return SceneHeadingType
 	case isAction(line, prevType):
@@ -564,14 +697,14 @@ func getLineType(line string, prevType int) int {
 		return DialogueType
 	case isLyric(line, prevType):
 		return LyricType
-	case isNote(line, prevType):
-		return NoteType
 	case isBoneyard(line, prevType):
 		return BoneyardType
 	case isEmpty(line, prevType):
 		return EmptyType
 	case isCenterAlignment(line, prevType):
 		return CenterAlignment
+	case isTransition(line, prevType):
+		return TransitionType
 	default:
 		return GeneralTextType
 	}
@@ -652,26 +785,74 @@ func ParseFile(fname string) (*Fountain, error) {
 
 // ToHTML converts a Fountain document based on the Options prvided.
 // @param opt *Options a populate struct of options this package supports
-// @return []byte of HTML
-func (doc *Fountain) ToHTML() []byte {
-	var (
-		out []byte
-	)
-	//FIXME: Handle .AsHTMLPage
-	//FIXME: Handle .IncludeLinkCSS
-	//FIXME: Handle .IncludeInLineCSS
-	//FIXME: Really should build out a DOM structure then render the DOM structure ...
-	if doc.TitlePage != nil {
-		for _, elem := range doc.TitlePage {
-			out = append(out, []byte(elem.ToHTML())...)
+// @return string of HTML
+func (doc *Fountain) ToHTML() string {
+	out := []string{}
+	// Handle Opening .AsHTMLPage
+	src := ""
+	if AsHTMLPage {
+		if LinkCSS {
+			src = getCSSLink()
 		}
+		if InlineCSS {
+			src = getCSS()
+		}
+		if LinkCSS || InlineCSS {
+			out = append(out, fmt.Sprintf(`<!DOCTYPE html>
+<html>
+	<head>
+%s
+	</head>
+	<body>
+`, src))
+		} else {
+			out = append(out, `<!DOCTYPE html>
+<html>
+	<body>
+	    <sectiom class="fountain">
+`, src)
+		}
+	} else {
+		if LinkCSS {
+			src = getCSSLink()
+			out = append(out, src)
+		}
+		if InlineCSS {
+			src = getCSS()
+			out = append(out, src)
+		}
+		out = append(out, fmt.Sprintf("<section class=%q>\n", "fountain"))
+	}
+	if doc.TitlePage != nil {
+		out = append(out, `<section class="title-page">
+`)
+		for _, elem := range doc.TitlePage {
+			out = append(out, elem.ToHTML())
+		}
+		out = append(out, `</section>
+`)
 	}
 	if doc.Elements != nil {
+		out = append(out, `<section class="script">
+`)
 		for _, elem := range doc.Elements {
-			out = append(out, []byte(elem.ToHTML())...)
+			out = append(out, elem.ToHTML())
 		}
+		out = append(out, `</section>
+`)
 	}
-	return out
+
+	// Handle Closing .AsHTMLPage
+	if AsHTMLPage {
+		out = append(out, `
+        </section>
+	</body>
+</html>
+`)
+	} else {
+		out = append(out, fmt.Sprintf(`</section>`))
+	}
+	return strings.Join(out, "")
 }
 
 // Run takes a byte split and returns an HTML fragment appropriate
@@ -685,7 +866,7 @@ func Run(input []byte) ([]byte, error) {
 	if err != nil {
 		out = append(out, input...)
 	} else {
-		out = append(out, doc.ToHTML()...)
+		out = append(out, []byte(doc.ToHTML())...)
 	}
 	return out, err
 }

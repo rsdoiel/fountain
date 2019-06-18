@@ -72,10 +72,11 @@ Or alternatively
 	outputFName      string
 
 	// App Option
-	asHTMLPage       bool
-	includeInlineCSS bool
-	includeCSS       bool
-	width            int
+	asHTMLPage bool
+	inlineCSS  bool
+	linkCSS    bool
+	includeCSS string
+	width      int
 )
 
 func main() {
@@ -97,9 +98,10 @@ func main() {
 	app.StringVar(&outputFName, "o,output", "", "set the output filename")
 
 	// App Option
-	app.BoolVar(&asHTMLPage, "html-page", false, "If true output an HTML page otherwise a fragement")
-	app.BoolVar(&includeInlineCSS, "inline-css", false, "Add inline CSS")
-	app.BoolVar(&includeCSS, "css", false, "Add link for CSS")
+	app.BoolVar(&asHTMLPage, "page", false, "If true output an HTML page otherwise an HTML fragement")
+	app.BoolVar(&inlineCSS, "inline-css", false, "Add inline CSS")
+	app.BoolVar(&linkCSS, "link-css", false, "Add a link to CSS (default CSS is fountain.css)")
+	app.StringVar(&includeCSS, "css", "fountain.css", "Include a custom CSS file")
 	app.IntVar(&width, "w,width", 65, "set the width for the text")
 
 	// Parse environment and options
@@ -148,7 +150,8 @@ func main() {
 	// Override defaults
 	fountain.AsHTMLPage = asHTMLPage
 	fountain.MaxWidth = width
-	fountain.InlineCSS = includeInlineCSS
+	fountain.InlineCSS = inlineCSS
+	fountain.LinkCSS = linkCSS
 	fountain.CSS = includeCSS
 	// Parse  input and render screenplay
 	screenplay, err := fountain.Run(src)

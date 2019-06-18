@@ -13,4 +13,8 @@ This package also includes a demonstration command line programs
 [fountain2html](docs/fountain2html.html)
 : A fountain to HTML converter
 
+## Reference materials
+
++ [fountain.io](https://fountain.io) - this is official place for all things fountain
+    + [Fountain Syntax](https://fountain.io/syntax)
 

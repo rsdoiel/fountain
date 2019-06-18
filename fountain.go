@@ -147,8 +147,8 @@ func typeName(t int) string {
 }
 
 // TypeName returns the string describing the type of Fountain Element.
-func (elem *Element) TypeName() string {
-	return typeName(elem.Type)
+func (element *Element) TypeName() string {
+	return typeName(element.Type)
 }
 
 // wordWrap will try to break line at a suitable place if they are equal or
@@ -249,9 +249,11 @@ func rightAlignText(line string, width int) string {
 	return strings.Join(src, "\n")
 }
 
-// format considers elem.Type and formatting output
-func format(element *Element) string {
+// String() considers elem.Type and formatting output as string
+func (element *Element) String() string {
 	switch element.Type {
+	case TitlePageType:
+		return element.Name + ":" + element.Content
 	case SceneHeadingType:
 		return strings.ToUpper(strings.TrimSpace(element.Content))
 	case ActionType:
@@ -279,14 +281,48 @@ func format(element *Element) string {
 	}
 }
 
-// String returns an element as a string considering type
-func (element *Element) String() string {
+// createElement assembles an HTML element with provided classs and content
+func createElement(elem string, classes []string, content string) string {
+	if len(classes) > 0 {
+		return fmt.Sprintf("<%s class=%q>%s</%s>\n", elem, strings.Join(classes, " "), content, elem)
+
+	}
+	return fmt.Sprintf("<%s>%s</%s>\n", elem, content, elem)
+}
+
+// ToHTML considers elem.Type and formatting output
+func (element *Element) ToHTML() string {
 	switch element.Type {
-	case TitlePageType:
-		return element.Name + ":" + element.Content
+	case SceneHeadingType:
+		return createElement("div", []string{"fountain", "scene-heading"}, strings.ToUpper(strings.TrimSpace(element.Content)))
+	case ActionType:
+		return createElement("div", []string{"fountain", "action"}, element.Content)
+	case CharacterType:
+		return createElement("div", []string{"fountain", "character"}, strings.ToUpper(strings.TrimSpace(element.Content)))
+	case ParentheticalType:
+		return createElement("div", []string{"fountain", "parenthetical"}, strings.TrimSpace(element.Content))
+	case DialogueType:
+		return createElement("div", []string{"fountain", "dialogue"}, element.Content)
+	case TransitionType:
+		s := strings.TrimSpace(element.Content)
+		if strings.HasPrefix(s, ">") && strings.HasSuffix(s, "<") {
+			return createElement("div", []string{"fountain", "transition", "centered"}, strings.TrimPrefix(strings.TrimSuffix(s, "<"), ">"))
+		}
+		if strings.HasPrefix(s, ">") {
+			return createElement("div", []string{"fountain", "transition"}, strings.TrimPrefix(s, ">"))
+		}
+		if strings.HasSuffix(s, ".") || strings.HasSuffix(s, "IN:") {
+			return createElement("div", []string{"fountain", "transition", "left-align"}, s)
+		}
+		return createElement("div", []string{"fountain", "transition", "right-align"}, strings.ToUpper(element.Content))
+	case CenterAlignment:
+		return createElement("div", []string{"fountain", "centered"}, element.Content)
+	case LeftAlignment:
+		return createElement("div", []string{"fountain", "left-align"}, element.Content)
+	case RightAlignment:
+		return createElement("div", []string{"fountain", "right-align"}, element.Content)
 	default:
-		//FIXME: certain types should get a formatting treatment.
-		return format(element)
+		return createElement("span", []string{"fountain", strings.ToLower(strings.Replace(typeName(element.Type), " ", "-", -1))}, element.Content)
 	}
 }
 
@@ -614,12 +650,6 @@ func ParseFile(fname string) (*Fountain, error) {
 	return Parse(src)
 }
 
-// createElement assembles an HTML element with provided classs and content
-func createElement(elem string, classes []string, content string) []byte {
-	s := fmt.Sprintf(`<%s class=%q>%s</%s>`, elem, strings.Join(classes, " "), content, elem)
-	return []byte(s)
-}
-
 // ToHTML converts a Fountain document based on the Options prvided.
 // @param opt *Options a populate struct of options this package supports
 // @return []byte of HTML
@@ -633,19 +663,12 @@ func (doc *Fountain) ToHTML() []byte {
 	//FIXME: Really should build out a DOM structure then render the DOM structure ...
 	if doc.TitlePage != nil {
 		for _, elem := range doc.TitlePage {
-			out = append(out, createElement("div", []string{"fountain", "title-page"}, elem.Content)...)
+			out = append(out, []byte(elem.ToHTML())...)
 		}
 	}
 	if doc.Elements != nil {
 		for _, elem := range doc.Elements {
-			className := typeName(elem.Type)
-			if className != "" {
-				className = strings.ToLower(strings.Replace(className, " ", "-", -1))
-				out = append(out, createElement("div", []string{"fountain", className}, elem.Content)...)
-			} else {
-				out = append(out, createElement("div", []string{"fountain"}, elem.Content)...)
-			}
-
+			out = append(out, []byte(elem.ToHTML())...)
 		}
 	}
 	return out

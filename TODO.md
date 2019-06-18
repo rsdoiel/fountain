@@ -3,6 +3,8 @@
 
 ## Bugs
 
++ [ ] Transition follow by transition at end of script treats the second transition as action, see sample-05.fountain, noticed in HTML output
+
 ## Next
 
 + [ ] handle unlabeled title pages

@@ -37,6 +37,7 @@ var (
 	clear: both;
 	margin-bottom: 2.5em;
 	margin-top: 2.5em;
+	border: 10px solid #d2d2d2;
 	border-radius: 3px;
 }
 
@@ -45,18 +46,19 @@ section.title-page, section.script {
 	padding-left: 1em;
 	padding-bottom: 2em;
 	margin-bottom: 2em;
-	border: 1px solid #d2d2d2;
 }
 
 .title-page,
 .script {
-	height: auto;
+	min-height: 20em;
 }
 
 .title {
+	position: relative;
+	top: 12em;
 	text-align: center;
-	padding-left: 33%%;
-	padding-right: 33%%;
+	padding-left: 33%;
+	padding-right: 33%;
 	text-transform: uppercase;
 	text-decoration: underline;
 	margin-top: 1em;
@@ -64,23 +66,29 @@ section.title-page, section.script {
 }
 
 .author {
+	position: relative;
+	top: 13em;
 	text-align: center;
-	padding-left: 33%%;
-	padding-right: 33%%;
+	padding-left: 33%;
+	padding-right: 33%;
 	margin-top: 0em;
 	margin-bottom: 0em;
 }
 
 .draft-date, .date {
+	position: relative;
+	top: 14em;
 	text-align: center;
-	padding-left: 33%%;
-	padding-right: 33%%;
+	padding-left: 33%;
+	padding-right: 33%;
 	margin-top: 0;
 	margin-bottom: 6em;
 
 }
 
 .copyright {
+	position:relative;
+	top:35em;
 	display: block;
 	padding: 0;   	
 	margin: 0;
@@ -90,6 +98,8 @@ section.title-page, section.script {
 }
 
 .contact {
+	position:relative;
+	top: 36em;
 	display: block;
 	padding: 0;
 	margin: 0;
@@ -127,24 +137,24 @@ section.title-page, section.script {
 }
 
 .action {
-	padding-right: 5%% !important;
+	padding-right: 5% !important;
 	font-size: 12px !important;
 	line-height: 14px !important;
 }
 
 .character {
-	padding-left: 40%% !important;
+	padding-left: 40% !important;
 }
 
 .dialogue {
-	padding-left: 20%% !important;
-	padding-right: 20%% !important;
+	padding-left: 20% !important;
+	padding-right: 20% !important;
 }
 
 .parenthetical {
 	display: block;
-	padding-left: 32%% !important;
-	padding-right: 30%% !important;
+	padding-left: 32% !important;
+	padding-right: 30% !important;
 }
 
 .dialogue + .parenthetical {
@@ -158,8 +168,8 @@ section.title-page, section.script {
 }
 
 .centered {
-	padding-left: 33%%;
-	padding-right: 33%%;
+	padding-left: 33%;
+	padding-right: 33%;
 	text-align: center;
 }
 
@@ -174,34 +184,6 @@ section.title-page, section.script {
 	height: 0;
 }
 
-section.fountain {
-	-webkit-box-shadow:
-		1px 1px 5px rgba(0,0,0,.1),
-		inset -2px -2px 2px white
-		;
-	-moz-box-shadow:
-		1px 1px 5px rgba(0,0,0,.1),
-		inset -2px -2px 2px white
-		;
-	box-shadow:
-		1px 1px 5px rgba(0,0,0,.1),
-		inset -2px -2px 2px white
-		;
-	border: none;
-	background-image:
-	-webkit-gradient(
-		linear,
-		100%% 100%%,
-		50%% 0%%,
-		from(#f9f9f9), to(white));
-	background-image:
-		-moz-linear-gradient(
-		    left top,
-		    rgb(255,255,255) 29%%,
-		    rgb(247,247,247) 100%%
-		);
-	border: 1px solid #d2d2d2;
-}
 `
 )
 

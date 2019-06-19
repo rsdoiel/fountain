@@ -109,6 +109,8 @@ const (
 var (
 	// MaxWidth used to set width for Fountain text output in String()
 	MaxWidth = 64
+	// SectionHeight is the default height of an HTML section
+	SectionHeight = "60em"
 	// AsHTMLPage if true generate the HTML header and footer blocks
 	AsHTMLPage = false
 	// InlineCSS sets behavior of including style elements with CSS in ToHTML()

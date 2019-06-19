@@ -33,7 +33,7 @@ func getCSS() string {
 		return fmt.Sprintf("%s", src)
 	}
 	// 2. Otherwise provide default
-	return createElement("style", []string{}, `
+	return createElement("style", []string{}, fmt.Sprintf(`
 /**
  * fountain.css - CSS for displaying foutain2html generated HTML.
  * It was inspired by scrippet.css found on the Fountain
@@ -68,16 +68,17 @@ section.title-page, section.script {
 	border: 1px solid #d2d2d2;
 }
 
-.title-page {
-	height:  600px;
+.title-page,
+.script {
+	height: %s;
 }
 
 .title {
 	position: relative;
 	top: 12em;
 	text-align: center;
-	padding-left: 33%;
-	padding-right: 33%;
+	padding-left: 33%%;
+	padding-right: 33%%;
 	text-transform: uppercase;
 	text-decoration: underline;
 	margin-top: 1em;
@@ -88,8 +89,8 @@ section.title-page, section.script {
 	position: relative;
 	top: 13em;
 	text-align: center;
-	padding-left: 33%;
-	padding-right: 33%;
+	padding-left: 33%%;
+	padding-right: 33%%;
 	margin-top: 0em;
 	margin-bottom: 0em;
 }
@@ -98,8 +99,8 @@ section.title-page, section.script {
 	position: relative;
 	top: 14em;
 	text-align: center;
-	padding-left: 33%;
-	padding-right: 33%;
+	padding-left: 33%%;
+	padding-right: 33%%;
 	margin-top: 0;
 	margin-bottom: 6em;
 
@@ -156,24 +157,24 @@ section.title-page, section.script {
 }
 
 .action {
-	padding-right: 5% !important;
+	padding-right: 5%% !important;
 	font-size: 12px !important;
 	line-height: 14px !important;
 }
 
 .character {
-	padding-left: 40% !important;
+	padding-left: 40%% !important;
 }
 
 .dialogue {
-	padding-left: 20% !important;
-	padding-right: 20% !important;
+	padding-left: 20%% !important;
+	padding-right: 20%% !important;
 }
 
 .parenthetical {
 	display: block;
-	padding-left: 32% !important;
-	padding-right: 30% !important;
+	padding-left: 32%% !important;
+	padding-right: 30%% !important;
 }
 
 .dialogue + .parenthetical {
@@ -182,20 +183,18 @@ section.title-page, section.script {
 
 .left-align {
 	float: left;
-	padding-left: 0%;
-	padding-right: 2em;
+	padding-left: 2em;
 	text-align: left;
 }
 
 .centered {
-	padding-left: 30%;
-	padding-right: 30%;
+	padding-left: 33%%;
+	padding-right: 33%%;
 	text-align: center;
 }
 
 .right-align {
 	float: right;
-	padding-left: 80%;
 	padding-right: 2em;
 	text-align: right;
 }
@@ -222,18 +221,18 @@ section.fountain {
 	background-image:
 	-webkit-gradient(
 		linear,
-		100% 100%,
-		50% 0%,
+		100%% 100%%,
+		50%% 0%%,
 		from(#f9f9f9), to(white));
 	background-image:
 		-moz-linear-gradient(
 		    left top,
-		    rgb(255,255,255) 29%,
-		    rgb(247,247,247) 100%
+		    rgb(255,255,255) 29%%,
+		    rgb(247,247,247) 100%%
 		);
 	border: 1px solid #d2d2d2;
 }
-`)
+`, SectionHeight))
 }
 
 func getCSSLink() string {

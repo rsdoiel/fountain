@@ -14,7 +14,7 @@ ifeq ($(OS), Windows)
 	EXT = .exe
 endif
 
-build:  fetch_scrippets_css fountain.go cmd/fountainfmt/fountainfmt.go cmd/fountain2html/fountain2html.go
+build:  fountain.go cmd/fountainfmt/fountainfmt.go cmd/fountain2html/fountain2html.go
 	go build -o bin/fountainfmt$(EXT) cmd/fountainfmt/fountainfmt.go
 	go build -o bin/fountain2json$(EXT) cmd/fountain2json/fountain2json.go
 	go build -o bin/fountain2html$(EXT) cmd/fountain2html/fountain2html.go

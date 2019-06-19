@@ -71,8 +71,11 @@ Or alternatively
 	outputFName      string
 
 	// App Option
-	width int
-	debug bool
+	width        int
+	debug        bool
+	showSection  bool
+	showSynopsis bool
+	showNotes    bool
 )
 
 func main() {
@@ -97,6 +100,9 @@ func main() {
 	// App Option
 	app.BoolVar(&debug, "debug", false, "display type and element content")
 	app.IntVar(&width, "w,width", 65, "set the width for the text")
+	app.BoolVar(&showSection, "section", false, "include sections in output")
+	app.BoolVar(&showSynopsis, "synopsis", false, "include synopsis in output")
+	app.BoolVar(&showNotes, "notes", false, "include notes in output")
 
 	// Parse environment and options
 	app.Parse()
@@ -138,6 +144,12 @@ func main() {
 		os.Exit(0)
 	}
 
+	// Setup options
+	fountain.MaxWidth = width
+	fountain.ShowSection = showSection
+	fountain.ShowSynopsis = showSynopsis
+	fountain.ShowNotes = showNotes
+
 	// ReadAll of input
 	src, err := ioutil.ReadAll(app.In)
 	cli.ExitOnError(app.Eout, err, quiet)
@@ -146,7 +158,6 @@ func main() {
 	cli.OnError(app.Eout, err, quiet)
 
 	//and then render as a string
-	fountain.MaxWidth = width
 	if debug {
 		for i, element := range screenplay.Elements {
 			fmt.Fprintf(app.Out, "%4d %02d %q\n", i, element.Type, element.Content)

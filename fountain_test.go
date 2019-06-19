@@ -107,7 +107,8 @@ func TestTypes(t *testing.T) {
 	   > FADE TO BLACK.
 	*/
 	expected := []int{
-		TransitionType,    // "!FADE IN:"
+		//NOTE: This "FADE IN:" should be action type because of the "!"
+		ActionType,        // "!FADE IN:"
 		EmptyType,         // ""
 		SceneHeadingType,  // "EXT. LIBRARY - DAY"
 		EmptyType,         // ""
@@ -130,11 +131,35 @@ func TestTypes(t *testing.T) {
 	}
 	for i := 0; i < len(doc.Elements); i++ {
 		if doc.Elements[i].Type != expected[i] {
-			t.Errorf("expected %q, got %q for %q", typeName(expected[i]), typeName(doc.Elements[i].Type), doc.Elements[i].Content)
+			t.Errorf("(%d) expected %q, got %q for %q", i, typeName(expected[i]), typeName(doc.Elements[i].Type), doc.Elements[i].Content)
 			t.FailNow()
 		}
 	}
 
+}
+
+func TestSamples(t *testing.T) {
+	files := []string{
+		"sample-01.fountain",
+		"sample-02.fountain",
+		"sample-03.fountain",
+		"sample-04.fountain",
+		"sample-05.fountain",
+		"sample-06.fountain",
+	}
+
+	for i, fName := range files {
+		screenplay, err := ParseFile(path.Join("testdata", fName))
+		if err != nil {
+			t.Errorf("(%d) Should be able to read and parse %s, %s", i, fName, err)
+			t.FailNow()
+		}
+		//FIXME: Check to see if the parse sequence is correct
+		if screenplay.Elements == nil {
+			t.Errorf("(%d) expected elements, got nil for %s", i, fName)
+		}
+
+	}
 }
 
 func TestMain(m *testing.M) {

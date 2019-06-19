@@ -68,7 +68,13 @@ section.title-page, section.script {
 	border: 1px solid #d2d2d2;
 }
 
+.title-page {
+	height:  600px;
+}
+
 .title {
+	position: relative;
+	top: 12em;
 	text-align: center;
 	padding-left: 33%;
 	padding-right: 33%;
@@ -79,6 +85,8 @@ section.title-page, section.script {
 }
 
 .author {
+	position: relative;
+	top: 13em;
 	text-align: center;
 	padding-left: 33%;
 	padding-right: 33%;
@@ -87,6 +95,8 @@ section.title-page, section.script {
 }
 
 .draft-date, .date {
+	position: relative;
+	top: 14em;
 	text-align: center;
 	padding-left: 33%;
 	padding-right: 33%;
@@ -96,30 +106,25 @@ section.title-page, section.script {
 }
 
 .copyright {
+	position:relative;
+	top:35em;
 	display: block;
 	padding: 0;   	
 	margin: 0;
-	font-size: 80%;
 	text-align: left;
 	text-transform: none;
 	text-decoration: none;
 }
 
 .contact {
+	position:relative;
+	top: 36em;
 	display: block;
-	height: auto;
-	width: auto;
 	padding: 0;
 	margin: 0;
-	font-size: 80%;
 	text-align: left;
 	text-transform: none;
 	text-decoration: none;
-	vertical-alignment: top;
-	/*
-	position: fixed;
-	bottom: 0;
-	*/
 }
 
 .script {

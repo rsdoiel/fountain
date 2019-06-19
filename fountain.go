@@ -383,7 +383,7 @@ func (element *Element) ToHTML() string {
 		case "copyright":
 			return createElement("div", []string{"copyright"}, element.Content)
 		case "contact":
-			return createElement("address", []string{"contact"}, element.Content)
+			return createElement("div", []string{"contact"}, element.Content)
 		default:
 			return createElement("div", []string{"general-text"}, element.Content)
 		}
@@ -688,6 +688,8 @@ func getLineType(line string, prevType int) int {
 		return SceneHeadingType
 	case isAction(line, prevType):
 		return ActionType
+	case isTransition(line, prevType):
+		return TransitionType
 	case isCharacter(line, prevType):
 		return CharacterType
 	case isParenthetical(line, prevType):
@@ -702,8 +704,6 @@ func getLineType(line string, prevType int) int {
 		return EmptyType
 	case isCenterAlignment(line, prevType):
 		return CenterAlignment
-	case isTransition(line, prevType):
-		return TransitionType
 	default:
 		return GeneralTextType
 	}

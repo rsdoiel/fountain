@@ -33,6 +33,7 @@ package fountain
 import (
 	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"strings"
@@ -109,8 +110,6 @@ const (
 var (
 	// MaxWidth used to set width for Fountain text output in String()
 	MaxWidth = 64
-	// SectionHeight is the default height of an HTML section
-	SectionHeight = "60em"
 	// AsHTMLPage if true generate the HTML header and footer blocks
 	AsHTMLPage = false
 	// InlineCSS sets behavior of including style elements with CSS in ToHTML()
@@ -126,6 +125,10 @@ var (
 	ShowSynopsis = false
 	// ShowNotes - preserve notes in output (e.g. when pretty printing a working draft)
 	ShowNotes = false
+
+	// Pretty Print - will pretty print for output (e.g. when turning into
+	// JSON, use MarshalIndent)
+	PrettyPrint = false
 )
 
 // Fountain is the document container. It is the type returned by Parse() and ParseFile()
@@ -857,6 +860,13 @@ func (doc *Fountain) ToHTML() string {
 		out = append(out, fmt.Sprintf(`</section>`))
 	}
 	return strings.Join(out, "")
+}
+
+func (doc *Fountain) ToJSON() ([]byte, error) {
+	if PrettyPrint {
+		return json.MarshalIndent(doc, "", "    ")
+	}
+	return json.Marshal(doc)
 }
 
 // Run takes a byte split and returns an HTML fragment appropriate

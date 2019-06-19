@@ -34,7 +34,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -146,11 +145,8 @@ func main() {
 	screenplay, err := fountain.Parse(src)
 	cli.OnError(app.Eout, err, quiet)
 
-	if prettyPrint {
-		src, err = json.MarshalIndent(screenplay, "", "    ")
-	} else {
-		src, err = json.Marshal(screenplay)
-	}
+	fountain.PrettyPrint = prettyPrint
+	src, err = screenplay.ToJSON()
 	cli.OnError(app.Eout, err, quiet)
 
 	fmt.Fprintf(app.Out, "%s", src)

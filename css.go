@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	CSSSourceTemplate = `/**
+	// SourceCSS is a default CSS to use when rendering
+	SourceCSS = `/**
  * fountain.css - CSS for displaying foutain2html generated HTML.
  * It was inspired by scrippet.css found on the Fountain
  * website at https://fountain.io/_css/scrippets.css which is attributed
@@ -49,12 +50,10 @@ section.title-page, section.script {
 
 .title-page,
 .script {
-	height: %s;
+	height: auto;
 }
 
 .title {
-	position: relative;
-	top: 12em;
 	text-align: center;
 	padding-left: 33%%;
 	padding-right: 33%%;
@@ -65,8 +64,6 @@ section.title-page, section.script {
 }
 
 .author {
-	position: relative;
-	top: 13em;
 	text-align: center;
 	padding-left: 33%%;
 	padding-right: 33%%;
@@ -75,8 +72,6 @@ section.title-page, section.script {
 }
 
 .draft-date, .date {
-	position: relative;
-	top: 14em;
 	text-align: center;
 	padding-left: 33%%;
 	padding-right: 33%%;
@@ -86,8 +81,6 @@ section.title-page, section.script {
 }
 
 .copyright {
-	position:relative;
-	top:35em;
 	display: block;
 	padding: 0;   	
 	margin: 0;
@@ -97,8 +90,6 @@ section.title-page, section.script {
 }
 
 .contact {
-	position:relative;
-	top: 36em;
 	display: block;
 	padding: 0;
 	margin: 0;
@@ -235,7 +226,7 @@ func getCSS() string {
 		return fmt.Sprintf("%s", src)
 	}
 	// 2. Otherwise provide default
-	return createElement("style", []string{}, fmt.Sprintf(CSSSourceTemplate, SectionHeight))
+	return createElement("style", []string{}, SourceCSS)
 }
 
 func getCSSLink() string {

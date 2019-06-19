@@ -44,7 +44,7 @@ dist/linux-amd64:
 	env GOOS=linux GOARCH=amd64 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
 	env GOOS=linux GOARCH=amd64 go build -o dist/bin/fountain2json cmd/fountain2json/fountain2json.go
 	env GOOS=linux GOARCH=amd64 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
-	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-amd64.zip README.md LICENSE INSTSALL.md bin/*
+	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-amd64.zip README.md LICENSE INSTALL.md bin/*
 	rm -fR dist/bin
 
 dist/windows-amd64:
@@ -52,7 +52,7 @@ dist/windows-amd64:
 	env GOOS=windows GOARCH=amd64 go build -o dist/bin/fountainfmt.exe cmd/fountainfmt/fountainfmt.go
 	env GOOS=windows GOARCH=amd64 go build -o dist/bin/fountain2json.exe cmd/fountain2json/fountain2json.go
 	env GOOS=windows GOARCH=amd64 go build -o dist/bin/fountain2html.exe cmd/fountain2html/fountain2html.go
-	cd dist && zip -r $(PROJECT)-$(VERSION)-windows-amd64.zip README.md LICENSE INSTSALL.md bin/*
+	cd dist && zip -r $(PROJECT)-$(VERSION)-windows-amd64.zip README.md LICENSE INSTALL.md bin/*
 	rm -fR dist/bin
 
 dist/macosx-amd64:
@@ -60,7 +60,7 @@ dist/macosx-amd64:
 	env GOOS=darwin GOARCH=amd64 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
 	env GOOS=darwin GOARCH=amd64 go build -o dist/bin/fountain2json cmd/fountain2json/fountain2json.go
 	env GOOS=darwin GOARCH=amd64 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
-	cd dist && zip -r $(PROJECT)-$(VERSION)-macosx-amd64.zip README.md LICENSE INSTSALL.md bin/*
+	cd dist && zip -r $(PROJECT)-$(VERSION)-macosx-amd64.zip README.md LICENSE INSTALL.md bin/*
 	rm -fR dist/bin
 
 dist/raspbian-arm7:
@@ -68,7 +68,7 @@ dist/raspbian-arm7:
 	env GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
 	env GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/fountain2json cmd/fountain2json/fountain2json.go
 	env GOOS=linux GOARCH=arm GOARM=7 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
-	cd dist && zip -r $(PROJECT)-$(VERSION)-raspbian-arm7.zip README.md LICENSE INSTSALL.md bin/*
+	cd dist && zip -r $(PROJECT)-$(VERSION)-raspbian-arm7.zip README.md LICENSE INSTALL.md bin/*
 	rm -fR dist/bin
 
 dist/linux-arm64:
@@ -76,7 +76,7 @@ dist/linux-arm64:
 	env GOOS=linux GOARCH=arm64 go build -o dist/bin/fountainfmt cmd/fountainfmt/fountainfmt.go
 	env GOOS=linux GOARCH=arm64 go build -o dist/bin/fountain2json cmd/fountain2json/fountain2json.go
 	env GOOS=linux GOARCH=arm64 go build -o dist/bin/fountain2html cmd/fountain2html/fountain2html.go
-	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-arm64.zip README.md LICENSE INSTSALL.md bin/*
+	cd dist && zip -r $(PROJECT)-$(VERSION)-linux-arm64.zip README.md LICENSE INSTALL.md bin/*
 	rm -fR dist/bin
 
 distribute_docs:

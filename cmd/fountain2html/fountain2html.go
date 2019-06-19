@@ -48,16 +48,16 @@ import (
 )
 
 var (
-	description = `fountain2html is a command line program that reads an fountain document and writes out HTML.
+	description = `%s is a command line program that reads an fountain document and writes out HTML.
 `
 
 	examples = `Convert a *screenplay.fountain* to *screenplay.html*.
 
-    fountain2html -i screenplay.foutnain -o screenplay.html
+    %s -i screenplay.foutnain -o screenplay.html
 
 Or alternatively
 
-    cat screenplay.fountain | foutnain2html > screenplay.html
+    cat screenplay.fountain | $s > screenplay.html
 `
 
 	// Standard Options
@@ -81,10 +81,11 @@ Or alternatively
 
 func main() {
 	app := cli.NewCli(fountain.Version)
+	appName := app.AppName()
 
 	// Add Help
-	app.AddHelp("description", []byte(description))
-	app.AddHelp("examples", []byte(examples))
+	app.AddHelp("description", []byte(fmt.Sprintf(description, appName)))
+	app.AddHelp("examples", []byte(fmt.Sprintf(examples, appName, appName)))
 
 	// Standard Options
 	app.BoolVar(&showHelp, "h,help", false, "display help")

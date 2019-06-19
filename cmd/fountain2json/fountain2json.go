@@ -78,10 +78,11 @@ Or alternatively
 
 func main() {
 	app := cli.NewCli(fountain.Version)
+	appName := app.AppName()
 
 	// Add Help
-	app.AddHelp("description", []byte(description))
-	app.AddHelp("examples", []byte(examples))
+	app.AddHelp("description", []byte(fmt.Sprintf(description, appName)))
+	app.AddHelp("examples", []byte(fmt.Sprintf(examples, appName, appName)))
 
 	// Standard Options
 	app.BoolVar(&showHelp, "h,help", false, "display help")

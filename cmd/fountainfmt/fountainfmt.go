@@ -47,16 +47,16 @@ import (
 )
 
 var (
-	description = `fountainfmt is a command line program that reads an fountain document and pretty prints it.
+	description = `%s is a command line program that reads an fountain document and pretty prints it.
 `
 
 	examples = `Pretty print *screenplay.txt* saving it as *screenplay.fountain*.
 
-    fountainfmt -i screenplay.txt -o screenplay.fountain
+    %s -i screenplay.txt -o screenplay.fountain
 
 Or alternatively
 
-    cat screenplay.txt | foutnainfmt > screenplay.fountain
+    cat screenplay.txt | %s > screenplay.fountain
 `
 
 	// Standard Options
@@ -77,10 +77,11 @@ Or alternatively
 
 func main() {
 	app := cli.NewCli(fountain.Version)
+	appName := app.AppName()
 
 	// Add Help
-	app.AddHelp("description", []byte(description))
-	app.AddHelp("examples", []byte(examples))
+	app.AddHelp("description", []byte(fmt.Sprintf(description, appName)))
+	app.AddHelp("examples", []byte(fmt.Sprintf(examples, appName, appName)))
 
 	// Standard Options
 	app.BoolVar(&showHelp, "h,help", false, "display help")

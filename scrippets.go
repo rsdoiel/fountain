@@ -1,3 +1,4 @@
+// Package fountain support encoding/decoding fountain screenplay markup
 //
 // scrippets.go manages fetching and inlining or generating links to John August's scrippets.css
 //

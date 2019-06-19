@@ -1,5 +1,4 @@
-//
-// fountain is a package encoding/decoding fountain formatted screenplays.
+// Package fountain supports encoding/decoding fountain formatted screenplays.
 //
 // @author R. S. Doiel, <rsdoiel@gmail.com>
 //
@@ -752,16 +751,19 @@ func Parse(src []byte) (*Fountain, error) {
 					i = 0
 					elem := new(Element)
 					elem.Type = currentType
+					elem.Name = typeName(elem.Type)
 					elem.Content = line
 					document.Elements[i] = elem
 				} else {
 					elem := document.Elements[i]
+					elem.Name = typeName(elem.Type)
 					elem.Content = elem.Content + "\n" + line
 					document.Elements[i] = elem
 				}
 			} else {
 				element := new(Element)
 				element.Type = currentType
+				element.Name = typeName(element.Type)
 				element.Content = line
 				document.Elements = append(document.Elements, element)
 			}

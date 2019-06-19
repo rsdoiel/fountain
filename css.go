@@ -1,3 +1,4 @@
+// Package fountain is a Golang package supporting Fountain screenplay markup.
 //
 // css.go manages setting up CSS for either inline style elements or links.
 //
@@ -189,7 +190,7 @@ section.title-page, section.script {
 
 .right-align {
 	float: right;
-	padding-left: 60%;
+	padding-left: 80%;
 	padding-right: 2em;
 	text-align: right;
 }

@@ -12,29 +12,8 @@ import (
 	"path"
 )
 
-func getCSS() string {
-	var (
-		CSS      string
-		override bool
-	)
-	// 1. Find where we've put any custom CSS
-	if _, err := os.Stat("fountain.css"); os.IsNotExist(err) == false {
-		CSS = "fountain.css"
-		override = true
-	} else if _, err := os.Stat(path.Join("css", "fountain.css")); os.IsNotExist(err) == false {
-		CSS = path.Join("css", "fountain.css")
-		override = true
-	}
-	if override {
-		src, err := ioutil.ReadFile(CSS)
-		if err != nil {
-			log.Printf("%s", err)
-		}
-		return fmt.Sprintf("%s", src)
-	}
-	// 2. Otherwise provide default
-	return createElement("style", []string{}, fmt.Sprintf(`
-/**
+var (
+	CSSSourceTemplate = `/**
  * fountain.css - CSS for displaying foutain2html generated HTML.
  * It was inspired by scrippet.css found on the Fountain
  * website at https://fountain.io/_css/scrippets.css which is attributed
@@ -232,7 +211,31 @@ section.fountain {
 		);
 	border: 1px solid #d2d2d2;
 }
-`, SectionHeight))
+`
+)
+
+func getCSS() string {
+	var (
+		CSS      string
+		override bool
+	)
+	// 1. Find where we've put any custom CSS
+	if _, err := os.Stat("fountain.css"); os.IsNotExist(err) == false {
+		CSS = "fountain.css"
+		override = true
+	} else if _, err := os.Stat(path.Join("css", "fountain.css")); os.IsNotExist(err) == false {
+		CSS = path.Join("css", "fountain.css")
+		override = true
+	}
+	if override {
+		src, err := ioutil.ReadFile(CSS)
+		if err != nil {
+			log.Printf("%s", err)
+		}
+		return fmt.Sprintf("%s", src)
+	}
+	// 2. Otherwise provide default
+	return createElement("style", []string{}, fmt.Sprintf(CSSSourceTemplate, SectionHeight))
 }
 
 func getCSSLink() string {

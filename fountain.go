@@ -36,6 +36,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 )
 
@@ -794,6 +795,7 @@ func ParseFile(fname string) (*Fountain, error) {
 // @param opt *Options a populate struct of options this package supports
 // @return string of HTML
 func (doc *Fountain) ToHTML() string {
+	var err error
 	out := []string{}
 	// Handle Opening .AsHTMLPage
 	src := ""
@@ -802,7 +804,10 @@ func (doc *Fountain) ToHTML() string {
 			src = getCSSLink()
 		}
 		if InlineCSS {
-			src = getCSS()
+			src, err = getCSS()
+			if err != nil {
+				log.Printf("%s", err)
+			}
 		}
 		if LinkCSS || InlineCSS {
 			out = append(out, fmt.Sprintf(`<!DOCTYPE html>
@@ -825,7 +830,10 @@ func (doc *Fountain) ToHTML() string {
 			out = append(out, src)
 		}
 		if InlineCSS {
-			src = getCSS()
+			src, err = getCSS()
+			if err != nil {
+				log.Printf("%s", err)
+			}
 			out = append(out, src)
 		}
 		out = append(out, fmt.Sprintf("<section class=%q>\n", "fountain"))

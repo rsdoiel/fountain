@@ -208,28 +208,34 @@ section.script {
 `
 )
 
-func getCSS() string {
+// getCSS() checks to see if there is any custom CSS filenamed fountain.css
+// in the current work directory or in the CSS folder and gets that
+// otherwise it'll fall back the value in SourceCSS.
+func getCSS() (string, error) {
 	var (
-		CSS      string
-		override bool
+		src []byte
+		err error
 	)
-	// 1. Find where we've put any custom CSS
-	if _, err := os.Stat("fountain.css"); os.IsNotExist(err) == false {
-		CSS = "fountain.css"
-		override = true
-	} else if _, err := os.Stat(path.Join("css", "fountain.css")); os.IsNotExist(err) == false {
-		CSS = path.Join("css", "fountain.css")
-		override = true
-	}
-	if override {
-		src, err := ioutil.ReadFile(CSS)
-		if err != nil {
-			log.Printf("%s", err)
+	// NOTE: If CSS value not set then look for fountain.css in
+	// current work directory and in css/fountain.css before falling
+	// back to the default SourceCSS value.
+	if CSS == "" {
+		// 1. Find where we've put any custom CSS
+		if _, err = os.Stat("fountain.css"); os.IsNotExist(err) == false {
+			CSS = "fountain.css"
+		} else if _, err = os.Stat(path.Join("css", "fountain.css")); os.IsNotExist(err) == false {
+			CSS = path.Join("css", "fountain.css")
 		}
-		return createElement("style", []string{}, fmt.Sprintf("%s", src))
+	}
+	src, err = ioutil.ReadFile(CSS)
+	if err != nil {
+		log.Printf("using default CSS, %s", err)
+	} else {
+		// Replace default CSS with requested CSS
+		SourceCSS = fmt.Sprintf("%s", src)
 	}
 	// 2. Otherwise provide default
-	return createElement("style", []string{}, SourceCSS)
+	return createElement("style", []string{}, SourceCSS), err
 }
 
 func getCSSLink() string {

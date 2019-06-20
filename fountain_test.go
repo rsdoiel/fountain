@@ -146,6 +146,7 @@ func TestSamples(t *testing.T) {
 		"sample-04.fountain",
 		"sample-05.fountain",
 		"sample-06.fountain",
+		"sample-07.fountain",
 	}
 
 	for i, fName := range files {
@@ -154,11 +155,10 @@ func TestSamples(t *testing.T) {
 			t.Errorf("(%d) Should be able to read and parse %s, %s", i, fName, err)
 			t.FailNow()
 		}
-		//FIXME: Check to see if the parse sequence is correct
 		if screenplay.Elements == nil {
 			t.Errorf("(%d) expected elements, got nil for %s", i, fName)
 		}
-
+		//FIXME: Check to see if the parse sequence is correct
 	}
 }
 

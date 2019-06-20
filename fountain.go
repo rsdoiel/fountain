@@ -37,6 +37,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -801,12 +802,17 @@ func (doc *Fountain) ToHTML() string {
 	src := ""
 	if AsHTMLPage {
 		if LinkCSS {
-			src = getCSSLink()
+			src, err = getCSSLink()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "WARNING: %s\n", err)
+			}
 		}
 		if InlineCSS {
 			src, err = getCSS()
 			if err != nil {
-				log.Printf("%s", err)
+				fmt.Fprintf(os.Stderr, "WARNING: %s, using default CSS\n", err)
+				// Fallback to default CSS after printing warning.
+				src = createElement("style", []string{}, SourceCSS)
 			}
 		}
 		if LinkCSS || InlineCSS {
@@ -826,15 +832,19 @@ func (doc *Fountain) ToHTML() string {
 		}
 	} else {
 		if LinkCSS {
-			src = getCSSLink()
+			src, err = getCSSLink()
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "WARNING: %s\n", err)
+			}
 			out = append(out, src)
 		}
 		if InlineCSS {
 			src, err = getCSS()
 			if err != nil {
 				log.Printf("%s", err)
+			} else {
+				out = append(out, src)
 			}
-			out = append(out, src)
 		}
 		out = append(out, fmt.Sprintf("<section class=%q>\n", "fountain"))
 	}

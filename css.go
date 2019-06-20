@@ -7,9 +7,9 @@ package fountain
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path"
+	"strings"
 )
 
 var (
@@ -229,15 +229,19 @@ func getCSS() (string, error) {
 	}
 	src, err = ioutil.ReadFile(CSS)
 	if err != nil {
-		log.Printf("using default CSS, %s", err)
+		return "", err
 	} else {
 		// Replace default CSS with requested CSS
 		SourceCSS = fmt.Sprintf("%s", src)
 	}
 	// 2. Otherwise provide default
-	return createElement("style", []string{}, SourceCSS), err
+	return createElement("style", []string{}, SourceCSS), nil
 }
 
-func getCSSLink() string {
-	return fmt.Sprintf("<link rel=%q href=%q>\n", "stylesheet", CSS)
+func getCSSLink() (string, error) {
+	var err error
+	if strings.Contains(CSS, "://") == false {
+		_, err = os.Stat(CSS)
+	}
+	return fmt.Sprintf("<link rel=%q href=%q>\n", "stylesheet", CSS), err
 }

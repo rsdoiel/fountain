@@ -6,6 +6,7 @@
 + [x] Transition follow by transition at end of script treats the second transition as action, see sample-05.fountain, noticed in HTML output
     + A: OK, the line begins with "!" so it should be "Action"
 + [ ] sample-05.fountain has the character "DOG" line identified as "dialogue"
++ [ ] sample-07.fountain (charade) has parenthiticals sprinkled in the dialogue, need to support this.  It meakes some dialog show up as Action in the JSON stream.
 
 
 ## Next (v0.1.0)

@@ -14,7 +14,8 @@ import (
 
 var (
 	// SourceCSS is a default CSS to use when rendering
-	SourceCSS = `/**
+	SourceCSS = `
+/**
  * fountain.css - CSS for displaying foutain2html generated HTML.
  * It was inspired by scrippet.css found on the Fountain
  * website at https://fountain.io/_css/scrippets.css which is attributed
@@ -24,95 +25,116 @@ var (
  */
 
 .fountain {
-	margin: 0;
-	padding: 0;
-	display: block;
+    margin: 0;
+    padding: 0;
+    display: block;
 }
 
 .fountain {
-	max-width: 400px;
-	background: #fffffc;
-	color: #000000;
-	padding: 5px 14px 15px 14px !important;
-	clear: both;
-	margin-bottom: 2.5em;
-	margin-top: 2.5em;
-	border: 10px solid #d2d2d2;
-	border-radius: 3px;
+    max-width: 400px;
+    background: #fffffc;
+    color: #000000;
+    padding: 5px 14px 15px 14px !important;
+    clear: both;
+    margin-bottom: 2.5em;
+    margin-top: 2.5em;
 }
 
-section.title-page, section.script {
-	width: 36em;
-	padding-left: 1em;
-	padding-bottom: 2em;
-	margin-bottom: 2em;
+section.title-page,
+section.script {
+    width: 36em;
+    padding-left: 1em;
+    padding-bottom: 2em;
+    margin-bottom: 2em;
+    border: 0.12em solid #d2d2d2;
+    border-radius: 3px;
 }
 
 .title-page,
 .script {
-	min-height: 20em;
+    min-height: 20em;
 }
 
+/* Simulate a page feed */
+.script .page-feed {
+    overflow: visible;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    margin-top: 4em;
+    margin-left: -1em;
+    /* For IE */ 
+    height: 30px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 0 0 0;
+    border-radius: 8px;
+} 
+.script .page-feed:before { 
+    display: block;
+    content: "";
+    height: 30px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    margin-top: -31px;
+    border-style: solid;
+    border-color: black;
+    border-width: 0 0 1px 0;
+    border-radius: 8px;
+}
+
+
 .title {
-	position: relative;
-	top: 12em;
-	text-align: center;
-	padding-left: 33%;
-	padding-right: 33%;
-	text-transform: uppercase;
-	text-decoration: underline;
-	margin-top: 1em;
-	margin-bottom: 1em;
+    text-align: center;
+    padding-left: 33%;
+    padding-right: 33%;
+    text-transform: uppercase;
+    text-decoration: underline;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 .author {
-	position: relative;
-	top: 13em;
-	text-align: center;
-	padding-left: 33%;
-	padding-right: 33%;
-	margin-top: 0em;
-	margin-bottom: 0em;
+    text-align: center;
+    padding-left: 33%;
+    padding-right: 33%;
+    margin-top: 0em;
+    margin-bottom: 0em;
 }
 
-.draft-date, .date {
-	position: relative;
-	top: 14em;
-	text-align: center;
-	padding-left: 33%;
-	padding-right: 33%;
-	margin-top: 0;
-	margin-bottom: 6em;
-
+.draft-date,
+.date {
+    text-align: center;
+    padding-left: 33%;
+    padding-right: 33%;
+    margin-top: 0;
+    margin-bottom: 6em;
 }
 
 .copyright {
-	position:relative;
-	top:35em;
-	display: block;
-	padding: 0;   	
-	margin: 0;
-	text-align: left;
-	text-transform: none;
-	text-decoration: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    text-transform: none;
+    text-decoration: none;
 }
 
 .contact {
-	position:relative;
-	top: 36em;
-	display: block;
-	padding: 0;
-	margin: 0;
-	text-align: left;
-	text-transform: none;
-	text-decoration: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    text-transform: none;
+    text-decoration: none;
 }
 
 .script {
-	padding-top: 2em;
-	padding-left: 0;
-	padding-right: 0;
-	padding-bottom: 2em;
+    padding-top: 2em;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 2em;
 }
 
 .scene-heading,
@@ -120,70 +142,69 @@ section.title-page, section.script {
 .character,
 .parenthetical,
 .transition,
-.dialogue  {
-	font: 12px/14px Courier, "Courier New", monospace;
+.dialogue {
+    font: 12px/14px Courier, "Courier New", monospace;
     text-align: left !important;
-	letter-spacing: 0 !important;
-	margin-top: 0px !important;
-	margin-bottom: 0px !important;
-	display: block;
+    letter-spacing: 0 !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    display: block;
 }
 
 .scene-heading,
 .action,
 .character {
-	padding-top: 1.5ex !important;
-	display: block;
+    padding-top: 1.5ex !important;
+    display: block;
 }
 
 .action {
-	padding-right: 5% !important;
-	font-size: 12px !important;
-	line-height: 14px !important;
+    padding-right: 5% !important;
+    font-size: 12px !important;
+    line-height: 14px !important;
 }
 
 .character {
-	padding-left: 40% !important;
+    padding-left: 40% !important;
 }
 
 .dialogue {
-	padding-left: 20% !important;
-	padding-right: 20% !important;
+    padding-left: 20% !important;
+    padding-right: 20% !important;
 }
 
 .parenthetical {
-	display: block;
-	padding-left: 32% !important;
-	padding-right: 30% !important;
+    display: block;
+    padding-left: 32% !important;
+    padding-right: 30% !important;
 }
 
-.dialogue + .parenthetical {
-	padding-bottom: 0 !important;
+.dialogue+.parenthetical {
+    padding-bottom: 0 !important;
 }
 
 .left-align {
-	float: left;
-	padding-left: 2em;
-	text-align: left;
+    float: left;
+    padding-left: 2em;
+    text-align: left;
 }
 
 .centered {
-	padding-left: 33%;
-	padding-right: 33%;
-	text-align: center;
+    padding-left: 33%;
+    padding-right: 33%;
+    text-align: center;
 }
 
 .right-align {
-	float: right;
-	padding-right: 2em;
-	text-align: right;
+    float: right;
+    padding-right: 2em;
+    text-align: right;
 }
 
 .empty {
-	display: none;
-	height: 0;
+    display: none;
+    height: 0;
 }
-
 `
 )
 
@@ -205,7 +226,7 @@ func getCSS() string {
 		if err != nil {
 			log.Printf("%s", err)
 		}
-		return fmt.Sprintf("%s", src)
+		return createElement("style", []string{}, fmt.Sprintf("%s", src))
 	}
 	// 2. Otherwise provide default
 	return createElement("style", []string{}, SourceCSS)

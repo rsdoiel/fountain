@@ -691,6 +691,8 @@ func getLineType(line string, prevType int) int {
 		return SynopsisType
 	case isNote(line, prevType):
 		return NoteType
+	case isLyric(line, prevType):
+		return LyricType
 	case isSceneHeading(line, prevType):
 		return SceneHeadingType
 	case isAction(line, prevType):
@@ -703,8 +705,6 @@ func getLineType(line string, prevType int) int {
 		return ParentheticalType
 	case isDialogue(line, prevType):
 		return DialogueType
-	case isLyric(line, prevType):
-		return LyricType
 	case isBoneyard(line, prevType):
 		return BoneyardType
 	case isEmpty(line, prevType):

@@ -92,7 +92,7 @@ clean:
 	if [ -d man ]; then rm -fR man; fi
 
 website:
-	./mk-website.py
+	./mk_website.py
 
 status:
 	git status
@@ -102,6 +102,6 @@ save:
 	git push origin $(BRANCH)
 
 publish:
-	./mk-website.py
+	./mk_website.py
 	./publish.bash
 

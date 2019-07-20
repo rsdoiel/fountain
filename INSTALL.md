@@ -1,6 +1,8 @@
-{
-    "title": "fountain, a Go package for working with Fountain screenplay format"
-}
++++
+markup = "mmark"
+title = "fountain, a Go package for working with Fountain screenplay format"
++++
+
 
 # Installation
 

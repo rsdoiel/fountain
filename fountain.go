@@ -43,7 +43,7 @@ import (
 
 const (
 	// Version of this package
-	Version = `v0.0.2`
+	Version = `v0.0.3`
 
 	//
 	// Types used in ElementSettings and Paragraph elements
@@ -880,6 +880,8 @@ func (doc *Fountain) ToHTML() string {
 	return strings.Join(out, "")
 }
 
+// ToJSON renders a Fountain type documents into a JSON
+// serialized data structure.
 func (doc *Fountain) ToJSON() ([]byte, error) {
 	if PrettyPrint {
 		return json.MarshalIndent(doc, "", "    ")

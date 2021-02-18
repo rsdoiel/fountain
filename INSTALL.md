@@ -1,20 +1,21 @@
 +++
-markup = "mmark"
 title = "fountain, a Go package for working with Fountain screenplay format"
 +++
 
 
-# Installation
+Installation
+============
 
 *fountain2json*, *fountainfmt*, *fountain2html* are a command line programs run from a shell like Bash. You can find compiled version in the [releases](https://github.com/rsdoiel/fountain/releases/latest) 
 
-## Compiled version
+Compiled version
+----------------
 
 This is generalized instructions for a release. 
 
-Compiled versions are available for Mac OS X (amd64 processor, macosx-amd64), 
-Linux (amd64 process, linux-amd64), Windows (amd64 processor, windows-amd64), 
-Rapsberry Pi (arm7 processor, raspbian-arm7) and Pine64 (arm64 processor, linux-arm64)
+Compiled versions are available for Mac OS X (x86 and M1 processors, macos-amd64, macos-arm64), 
+Linux (x86 processor, linux-amd64), Windows (x86 processor, windows-amd64), 
+Rapsberry Pi OS (arm7 processor, raspbian-arm7) and Pine64 (arm64 processor, linux-arm64)
 
 
 VERSION_NUMBER is a [symantic version number](http://semver.org/) (e.g. v0.1.2)
@@ -28,7 +29,8 @@ For all the released version go to the project page on Github and click latest r
 | Platform    | Zip Filename                           |
 |-------------|----------------------------------------|
 | Windows     | fountain-VERSION_NUMBER-windows-amd64.zip |
-| Mac OS X    | fountain-VERSION_NUMBER-macosx-amd64.zip  |
+| Mac OS X    | fountain-VERSION_NUMBER-macos-amd64.zip  |
+| Mac OS X    | fountain-VERSION_NUMBER-macos-arm64.zip  |
 | Linux/Intel | fountain-VERSION_NUMBER-linux-amd64.zip   |
 | Raspbery Pi | fountain-VERSION_NUMBER-raspbian-arm7.zip |
 | Pine64      | fountain-VERSION_NUMBER-linux-arm64.zip   |
@@ -59,7 +61,7 @@ zip file.
 
 ```shell
     cd Downloads/
-    unzip fountain-*-macosx-amd64.zip
+    unzip fountain-*-macos-amd64.zip
     mkdir -p $HOME/bin
     cp -v bin/* $HOME/bin/
     export PATH=$HOME/bin:$PATH

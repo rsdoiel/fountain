@@ -1,73 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><no value></title>
+    <title>…</title>
     <link href="/css/site.css" rel="stylesheet" />
 </head>
 <body>
 <header>
-<no value>
+…
 </header>
 <section>
-<h1>Action Items</h1>
-
-<h2>Bugs</h2>
-
+<h1 id="action-items">
+Action Items
+</h1>
+<h2 id="bugs">
+Bugs
+</h2>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled="" checked="" /> Transition follow by transition at end of script treats the second transition as action, see sample-05.fountain, noticed in HTML output
 <ul>
-<li>[x] Transition follow by transition at end of script treats the second transition as action, see sample-05.fountain, noticed in HTML output
-
-<ul>
-<li>A: OK, the line begins with &ldquo;!&rdquo; so it should be &ldquo;Action&rdquo;</li>
-</ul></li>
-<li>[ ] sample-05.fountain has the character &ldquo;DOG&rdquo; line identified as &ldquo;dialogue&rdquo;</li>
-<li>[ ] sample-07.fountain (charade) has parenthiticals sprinkled in the dialogue, need to support this.  It meakes some dialog show up as Action in the JSON stream.</li>
+<li>
+A: OK, the line begins with “!” so it should be “Action”
+</li>
 </ul>
-
-<h2>Next (v0.1.0)</h2>
-
-<ul>
-<li>[ ] Add test to check to validate parse structure of each <code>testdata/*.fountain</code> file</li>
-<li>[ ] Add demo of using <strong>fountain2json</strong> for creating a script report</li>
-<li>[ ] Improve <strong>fountainfmt</strong> pretty print options</li>
-<li>[ ] handle unlabeled title pages</li>
-<li>[x] Write and <strong>fountain2html</strong></li>
-<li>[ ] Add CSS dump option for <strong>fountain2html</strong></li>
-<li>[ ] Add option to render <a href="https://fountain.io/scrippets">scrippets</a> compatible HTML and CSS</li>
+</li>
+<li>
+<input type="checkbox" disabled="" /> sample-05.fountain has the character “DOG” line identified as “dialogue”
+</li>
+<li>
+<input type="checkbox" disabled="" /> sample-07.fountain (charade) has parenthiticals sprinkled in the dialogue, need to support this. It meakes some dialog show up as Action in the JSON stream.
+</li>
 </ul>
-
-<h2>Someday, Maybe</h2>
-
-<ul>
-<li>[ ] Add support for Markdown front matter for additiona metadata processing</li>
-<li>[ ] handle general text (outside of notes, boneyard)
-
-<ul>
-<li>this could be handled like front matter in Markdown</li>
-</ul></li>
-<li>[ ] definable heading prefixes</li>
-<li>[ ] reports on screenplay</li>
-<li>[ ] fountain2pdf</li>
+<h2 id="next-v0.1.0">
+Next (v0.1.0)
+</h2>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled="" /> Add test to check to validate parse structure of each <code>testdata/*.fountain</code> file
+</li>
+<li>
+<input type="checkbox" disabled="" /> Add demo of using <strong>fountain2json</strong> for creating a script report
+</li>
+<li>
+<input type="checkbox" disabled="" /> Improve <strong>fountainfmt</strong> pretty print options
+</li>
+<li>
+<input type="checkbox" disabled="" /> handle unlabeled title pages
+</li>
+<li>
+<input type="checkbox" disabled="" checked="" /> Write and <strong>fountain2html</strong>
+</li>
+<li>
+<input type="checkbox" disabled="" /> Add CSS dump option for <strong>fountain2html</strong>
+</li>
+<li>
+<input type="checkbox" disabled="" /> Add option to render <a href="https://fountain.io/scrippets">scrippets</a> compatible HTML and CSS
+</li>
 </ul>
-
-<h2>Completed</h2>
-
+<h2 id="someday-maybe">
+Someday, Maybe
+</h2>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled="" /> Add support for Markdown front matter for additiona metadata processing
+</li>
+<li>
+<input type="checkbox" disabled="" /> handle general text (outside of notes, boneyard)
 <ul>
-<li>[x] Write Parse(src []byte) returning a Fountain Struct and error</li>
-<li>[x] word wrap for dialogue</li>
+<li>
+this could be handled like front matter in Markdown
+</li>
 </ul>
-
+</li>
+<li>
+<input type="checkbox" disabled="" /> definable heading prefixes
+</li>
+<li>
+<input type="checkbox" disabled="" /> reports on screenplay
+</li>
+<li>
+<input type="checkbox" disabled="" /> fountain2pdf
+</li>
+</ul>
+<h2 id="completed">
+Completed
+</h2>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled="" checked="" /> Write Parse(src []byte) returning a Fountain Struct and error
+</li>
+<li>
+<input type="checkbox" disabled="" checked="" /> word wrap for dialogue
+</li>
+</ul>
 </section>
 <nav>
 <ul>
-<li><a href="/">Home</a></li>
-<li><a href="./">README</a></li>
-<li><a href="license.html">LICENSE</a></li>
-<li><a href="install.html">INSTALL</a></li>
-<li><a href="docs/">Documentation</a></li>
-<li><a href="testdata.html">Test Data</a></li>
-<li><a href="https://github.com/rsdoiel/fountain">GitHub</a></li>
+<li>
+<a href="/">Home</a>
+</li>
+<li>
+<a href="./">README</a>
+</li>
+<li>
+<a href="license.html">LICENSE</a>
+</li>
+<li>
+<a href="install.html">INSTALL</a>
+</li>
+<li>
+<a href="docs/">Documentation</a>
+</li>
+<li>
+<a href="testdata.html">Test Data</a>
+</li>
+<li>
+<a href="https://github.com/rsdoiel/fountain">GitHub</a>
+</li>
 </ul>
-
 </nav>
 <footer>
 copyright (c) 2019 all rights reserved.

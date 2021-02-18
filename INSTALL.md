@@ -1,6 +1,6 @@
-+++
-title = "fountain, a Go package for working with Fountain screenplay format"
-+++
+{
+	"title": "fountain, a Go package for working with Fountain screenplay format"
+}
 
 
 Installation
@@ -36,7 +36,8 @@ For all the released version go to the project page on Github and click latest r
 | Pine64      | fountain-VERSION_NUMBER-linux-arm64.zip   |
 
 
-## The basic recipe
+The basic recipe
+----------------
 
 + Find the Zip file listed matching the architecture you're running and download it
     + (e.g. if you're on a Windows 10 laptop/Surface with a amd64 style CPU you'd choose the Zip file with "windows-amd64" in the name).
@@ -44,7 +45,7 @@ For all the released version go to the project page on Github and click latest r
 + Copy the contents of the folder named "bin" to a folder that is in your path 
     + (e.g. "$HOME/bin" is common).
 + Adjust your PATH if needed
-    + (e.g. `export PATH="$HOME/bin:$PATH"`)
+    + (e.g. export PATH="$HOME/bin:$PATH")
 + Test
 
 
@@ -130,7 +131,8 @@ downloading the zip file.
 ```
 
 
-## Compiling from source
+Compiling from source
+---------------------
 
 The _fountain_ command line programs are "go gettable".  Use the "go get" command to download the dependant packages
 as well as source code.

@@ -42,8 +42,6 @@ import (
 )
 
 const (
-	// Version of this package
-	Version = `v0.0.3`
 
 	//
 	// Types used in ElementSettings and Paragraph elements

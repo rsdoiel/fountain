@@ -6,7 +6,7 @@
     "codeRepository": "https://github.com/rsdoiel/fountain",
     "issueTracker": "https://github.com/rsdoiel/fountain/issues",
     "license": "https://rsdoiel.github.io/fountain/license.html",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "author": [
         {
             "@type": "Person",
@@ -16,7 +16,7 @@
             "@id": "https://orcid.org/0000-0003-0900-6903"
         }
     ],
-    "developmentStatus": "active",
+    "developmentStatus": "inactive",
     "keywords": [
         "Github",
         "text markup",

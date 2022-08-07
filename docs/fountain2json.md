@@ -1,42 +1,63 @@
+% fountain2json(1) fountain2json user manual
+% R. S. Doiel
+% August 7, 2022
 
-# USAGE
+# NAME
 
-	fountain2json [OPTIONS]
+fountain2json
 
-## DESCRIPTION
+# SYNOPSIS
+
+fountain2json [OPTIONS]
+
+# DESCRIPTION
 
 fountain2json is a command line program that reads an fountain document and returns a JSON representation of it.
 
-
-
-## OPTIONS
+# OPTIONS
 
 Below are a set of options available.
 
-```
-    -generate-manpage    generate man page
-    -generate-markdown   generate Markdown documentation
-    -h, -help            display help
-    -i, -input           set the input filename
-    -l, -license         display license
-    -nl, -newline        add a trailing newline
-    -o, -output          set the output filename
-    -p, -pretty          pretty print the JSON output
-    -quiet               suppress error messages
-    -v, -version         display version
-    -w, -width           set the width for the text
-```
+-h, -help
+: display help
+
+-i, -input
+: set the input filename
+
+-l, -license
+: display license
+
+-nl, -newline
+: add a trailing newline
+
+-o, -output
+: set the output filename
+
+-p, -pretty
+: pretty print the JSON output
+
+-quiet
+: suppress error messages
+
+-v, -version
+: display version
+
+-w, -width
+: set the width for the text
 
 
-## EXAMPLES
+# EXAMPLES
 
 Render *screenplay.fountain* as *screenplay.json*.
 
+~~~shell
     fountain2json -i screenplay.fountain -o screenplay.json
+~~~
 
 Or alternatively
 
+~~~shell
     cat screenplay.fountain | fountain2json > screenplay.json
+~~~
 
 
-fountain2json v0.0.2

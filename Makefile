@@ -26,7 +26,7 @@ endif
 
 OS = $(shell uname)
 
-EXT = 
+EXT =
 ifeq ($(OS), Windows)
 	EXT = .exe
 endif
@@ -48,7 +48,7 @@ CITATION.cff: .FORCE
 
 about.md: codemeta.json $(PROGRAMS)
 	pdtk prep -i codemeta.json -- --template codemeta-md.tmpl >about.md
-	
+
 
 $(PROGRAMS): cmd/*/*.go $(PACKAGE)
 	@mkdir -p bin
@@ -88,7 +88,7 @@ test: clean build
 cleanweb:
 	@if [ -f index.html ]; then rm *.html; fi
 
-clean: 
+clean:
 	-if [ -d bin ]; then rm -fR bin; fi
 	-if [ -d dist ]; then rm -fR dist; fi
 	-if [ -d testout ]; then rm -fR testout; fi
@@ -132,7 +132,7 @@ distribute_docs:
 	cp -v README.md dist/
 	cp -v LICENSE dist/
 	cp -vR man dist/
-	#cp -v INSTALL.md dist/
+	cp -v INSTALL.md dist/
 
 update_version:
 	$(EDITOR) codemeta.json

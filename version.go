@@ -1,5 +1,5 @@
 package fountain
 
 // Version of package
-const Version = "0.0.5"
+const Version = "0.0.6"
 

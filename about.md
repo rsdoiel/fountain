@@ -5,7 +5,7 @@ title: fountain
 About this software
 ===================
 
-fountain 0.0.5
+fountain 0.0.6
 ----------------
 
 ### Authors

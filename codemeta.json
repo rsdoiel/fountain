@@ -6,7 +6,7 @@
     "codeRepository": "https://github.com/rsdoiel/fountain",
     "issueTracker": "https://github.com/rsdoiel/fountain/issues",
     "license": "https://rsdoiel.github.io/fountain/license.html",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "author": [
         {
             "@type": "Person",

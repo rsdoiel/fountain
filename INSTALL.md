@@ -1,20 +1,20 @@
-{
-	"title": "fountain, a Go package for working with Fountain screenplay format"
-}
+---
+title: "fountain, a Go package for working with Fountain screenplay format"
+---
 
 
 Installation
 ============
 
-*fountain2json*, *fountainfmt*, *fountain2html* are a command line programs run from a shell like Bash. You can find compiled version in the [releases](https://github.com/rsdoiel/fountain/releases/latest) 
+*fountain2json*, *fountainfmt*, *fountain2html* are a command line programs run from a shell like Bash. You can find compiled version in the [releases](https://github.com/rsdoiel/fountain/releases/latest)
 
 Compiled version
 ----------------
 
-This is generalized instructions for a release. 
+This is generalized instructions for a release.
 
-Compiled versions are available for Mac OS X (x86 and M1 processors, macos-amd64, macos-arm64), 
-Linux (x86 processor, linux-amd64), Windows (x86 processor, windows-amd64), 
+Compiled versions are available for Mac OS X (x86 and M1 processors, macos-amd64, macos-arm64),
+Linux (x86 processor, linux-amd64), Windows (x86 processor, windows-amd64),
 Rapsberry Pi OS (arm7 processor, raspbian-arm7) and Pine64 (arm64 processor, linux-arm64)
 
 
@@ -41,8 +41,8 @@ The basic recipe
 
 + Find the Zip file listed matching the architecture you're running and download it
     + (e.g. if you're on a Windows 10 laptop/Surface with a amd64 style CPU you'd choose the Zip file with "windows-amd64" in the name).
-+ Download the zip file and unzip the file.  
-+ Copy the contents of the folder named "bin" to a folder that is in your path 
++ Download the zip file and unzip the file.
++ Copy the contents of the folder named "bin" to a folder that is in your path
     + (e.g. "$HOME/bin" is common).
 + Adjust your PATH if needed
     + (e.g. export PATH="$HOME/bin:$PATH")
@@ -57,7 +57,7 @@ The basic recipe
 4. Make sure the new location in in our path
 5. Test
 
-Here's an example of the commands run in the Terminal App after downloading the 
+Here's an example of the commands run in the Terminal App after downloading the
 zip file.
 
 ```shell
@@ -89,7 +89,7 @@ downloading the zip file.
 ```
 
 
-### Linux 
+### Linux
 
 1. Download the zip file
 2. Unzip the zip file
@@ -151,5 +151,6 @@ Or clone the repstory and then compile
     make test
     make install
 ```
+
 
 

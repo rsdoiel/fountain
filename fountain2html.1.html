@@ -3,14 +3,13 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="language" content="EN">
-  <title>R. S. Doiel, Software Engineer/Analyst - fountain2html(1)
-fountain2html user manual</title>
+  <title>R. S. Doiel, Software Engineer/Analyst - fountain2html.1</title>
 
   <link rel="stylesheet" type="text/css"  href="/printfonts/print.css" media="print" />
   <link rel="stylesheet" type="text/css"  href="/webfonts/fonts.css" media="screen" />
   <link rel="stylesheet" type="text/css"  href="/css/site.css" media="screen" />
   <link title="RSS feed for rsdoiel's blog" rel="alternate" type="application/rss+xml" href="https://rsdoiel.github.io/rss.xml" />
-  <link title="markdown source for page" rel="alternative" type="application/markdown" href="docs/fountain2html.md">
+  <link title="markdown source for page" rel="alternative" type="application/markdown" href="fountain2html.1.md">
 </head>
 <body>
 <nav>
@@ -25,59 +24,58 @@ fountain2html user manual</title>
 </nav>
 
 <section>
-<!--  <h1>fountain2html(1) fountain2html user manual</h1> -->
+<!--  <h1>fountain2html.1</h1> -->
 
 <h1 id="name">NAME</h1>
 <p>fountain2html</p>
-<h1 id="sysnopsis">SYSNOPSIS</h1>
+<h1 id="synopsis">SYNOPSIS</h1>
 <p>fountain2html <a href="#options">OPTIONS</a></p>
 <h1 id="description">DESCRIPTION</h1>
 <p>fountain2html is a command line program that reads an fountain
 document and writes out HTML.</p>
 <h1 id="options">OPTIONS</h1>
-<p>Below are a set of options available.</p>
 <dl>
-<dt>-css</dt>
-<dd>
-Add link for CSS
-</dd>
-<dt>-h, -help</dt>
+<dt>-help</dt>
 <dd>
 display help
 </dd>
-<dt>-html-page</dt>
+<dt>-license</dt>
 <dd>
-If true output an HTML page otherwise a fragement
+display license
 </dd>
-<dt>-i, -input</dt>
+<dt>-version</dt>
 <dd>
-set the input filename
+display version
+</dd>
+<dt>-i</dt>
+<dd>
+read from input file
+</dd>
+<dt>-o</dt>
+<dd>
+read from output file
+</dd>
+<dt>-newline</dt>
+<dd>
+add a trailing newline
+</dd>
+<dt>-page</dt>
+<dd>
+If true output an HTML page otherwise an HTML fragement
 </dd>
 <dt>-inline-css</dt>
 <dd>
 Add inline CSS
 </dd>
-<dt>-l, -license</dt>
+<dt>-link-css</dt>
 <dd>
-display license
+Add a link to CSS (default CSS is fountain.css)
 </dd>
-<dt>-nl, -newline</dt>
+<dt>-css</dt>
 <dd>
-add a trailing newline
+Include a custom CSS file
 </dd>
-<dt>-o, -output</dt>
-<dd>
-set the output filename
-</dd>
-<dt>-quiet</dt>
-<dd>
-suppress error messages
-</dd>
-<dt>-v, -version</dt>
-<dd>
-display version
-</dd>
-<dt>-w, -width</dt>
+<dt>-width</dt>
 <dd>
 set the width for the text
 </dd>
@@ -85,9 +83,9 @@ set the width for the text
 <h1 id="examples">EXAMPLES</h1>
 <p>Convert a <em>screenplay.fountain</em> to
 <em>screenplay.html</em>.</p>
-<pre class="shell"><code>    fountain2html -i screenplay.foutnain -o screenplay.html</code></pre>
+<pre><code>    fountain2html -i screenplay.foutnain -o screenplay.html</code></pre>
 <p>Or alternatively</p>
-<pre class="shell"><code>    cat screenplay.fountain | foutnain2html &gt; screenplay.html</code></pre>
+<pre><code>    cat screenplay.fountain | fountain2html &gt;screenplay.html</code></pre>
 </section>
 
 <footer>

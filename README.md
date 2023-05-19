@@ -6,13 +6,13 @@ _fountain_ is an experimental Golang package for working with Fountain formatted
 
 This package also includes a demonstration command line programs
 
-[fountain2json](fountain2json.html)
+[fountain2json](fountain2json.1.md)
 : A fountain to JSON converter (useful for building reports)
 
-[fountainfmt](fountainfmt.html) 
+[fountainfmt](fountainfmt.1.md) 
 : A fountain document pretty printer
 
-[fountain2html](fountain2html.html)
+[fountain2html](fountain2html.1.md)
 : A fountain to HTML converter
 
 ## Reference materials

@@ -34,37 +34,82 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
-
-	// Caltech Library Packages
-	"github.com/caltechlibrary/cli"
+	"path"
+	"strings"
 
 	// My packages
 	"github.com/rsdoiel/fountain"
 )
 
 var (
-	description = `%s is a command line program that reads an fountain document and returns a JSON representation of it.
 
-`
+	helpText = `%{app_name}(1) | version {version} {release_hash}
+% R. S. Doiel
+% {release_date}
 
-	examples = `Render *screenplay.fountain* as *screenplay.json*.
+# NAME
 
-    %s -i screenplay.fountain -o screenplay.json
+{app_name}
+
+# SYNOPSIS
+
+{app_name} [OPTIONS]
+
+# DESCRIPTION
+
+{app_name} is a command line program that reads an fountain document and returns a JSON representation of it.
+
+# OPTIONS
+
+-help
+: display help
+
+-license
+: display license
+
+-version
+: display version
+
+-i
+: read from filename
+
+-o
+: write to filename
+
+-newline
+: add a trailing newline
+
+-width
+: set the width of the text
+
+-pretty
+: pretty print the output
+
+
+# EXAMPLES
+
+Render *screenplay.fountain* as *screenplay.json*.
+
+~~~
+{app_name} -i screenplay.fountain -o screenplay.json
+~~~
 
 Or alternatively
 
-    cat screenplay.fountain | %s > screenplay.json
+~~~
+    cat screenplay.fountain | {app_name} > screenplay.json
+~~~
+
 `
 
 	// Standard Options
 	showHelp         bool
 	showLicense      bool
 	showVersion      bool
-	generateMarkdown bool
-	generateManPage  bool
 	newLine          bool
 	quiet            bool
 	inputFName       string
@@ -75,82 +120,107 @@ Or alternatively
 	prettyPrint bool
 )
 
-func main() {
-	app := cli.NewCli(fountain.Version)
-	appName := app.AppName()
+func fmtHelp(src string, appName string, version string, releaseDate string, releaseHash string) string {
+	m := map[string]string{
+		"{app_name}": appName,
+		"{version}": version,
+		"{release_date}": releaseDate,
+		"{release_hash}": releaseHash,
+	}
+	for k, v := range m {
+		if strings.Contains(src, k) {
+			src = strings.ReplaceAll(src, k, v)
+		}
+	}
+	return src
+}
 
-	// Add Help
-	app.AddHelp("description", []byte(fmt.Sprintf(description, appName)))
-	app.AddHelp("examples", []byte(fmt.Sprintf(examples, appName, appName)))
+
+func main() {
+	appName := path.Base(os.Args[0])
+	// NOTE: the following are set with version.go is generted
+	version := fountain.Version
+	releaseDate := fountain.ReleaseDate
+	releaseHash := fountain.ReleaseHash
 
 	// Standard Options
-	app.BoolVar(&showHelp, "h,help", false, "display help")
-	app.BoolVar(&showLicense, "l,license", false, "display license")
-	app.BoolVar(&showVersion, "v,version", false, "display version")
-	app.BoolVar(&generateMarkdown, "generate-markdown", false, "generate Markdown documentation")
-	app.BoolVar(&generateManPage, "generate-manpage", false, "generate man page")
-	app.BoolVar(&newLine, "nl,newline", true, "add a trailing newline")
-	app.BoolVar(&quiet, "quiet", false, "suppress error messages")
-	app.StringVar(&inputFName, "i,input", "", "set the input filename")
-	app.StringVar(&outputFName, "o,output", "", "set the output filename")
+	flag.BoolVar(&showHelp, "help", false, "display help")
+	flag.BoolVar(&showLicense, "license", false, "display license")
+	flag.BoolVar(&showVersion, "version", false, "display version")
+	flag.BoolVar(&newLine, "newline", true, "add a trailing newline")
+	flag.BoolVar(&quiet, "quiet", false, "suppress error messages")
+	flag.StringVar(&inputFName, "i", "", "set the input filename")
+	flag.StringVar(&outputFName, "o", "", "set the output filename")
 
 	// App Option
-	app.BoolVar(&prettyPrint, "p,pretty", false, "pretty print the JSON output")
-	app.IntVar(&width, "w,width", 65, "set the width for the text")
+	flag.BoolVar(&prettyPrint, "pretty", false, "pretty print the JSON output")
+	flag.IntVar(&width, "width", 65, "set the width for the text")
 
 	// Parse environment and options
-	app.Parse()
-	args := app.Args()
+	flag.Parse()
 
 	// Setup IO
 	var err error
-	app.Eout = os.Stderr
-	app.In, err = cli.Open(inputFName, os.Stdin)
-	cli.ExitOnError(app.Eout, err, quiet)
-	defer cli.CloseFile(inputFName, app.In)
-	app.Out, err = cli.Create(outputFName, os.Stdout)
-	cli.ExitOnError(app.Eout, err, quiet)
-	defer cli.CloseFile(outputFName, app.Out)
+
+	in := os.Stdin
+	out := os.Stdout
+	eout := os.Stderr
+
+	if inputFName != "" {
+		in, err = os.Open(inputFName)
+		if err != nil {
+			fmt.Fprintf(eout, "%s\n", err)
+			os.Exit(1)
+		}
+		defer in.Close()
+	}
+	
+	if outputFName != "" {
+		out, err = os.Create(outputFName)
+		if err != nil {
+			fmt.Fprintf(eout, "%s\n", err)
+			os.Exit(1)
+		}
+		defer out.Close()
+	}
 
 	// Process options
-	if generateMarkdown {
-		app.GenerateMarkdown(app.Out)
-		os.Exit(0)
-	}
-	if generateManPage {
-		app.GenerateManPage(app.Out)
-		os.Exit(0)
-	}
 	if showHelp {
-		if len(args) > 0 {
-			fmt.Fprintln(app.Out, app.Help(args...))
-		} else {
-			app.Usage(app.Out)
-		}
+		fmt.Fprintf(out, "%s\n", fmtHelp(helpText, appName, version, releaseDate, releaseHash))
 		os.Exit(0)
 	}
 	if showLicense {
-		fmt.Fprintln(app.Out, app.License())
+		fmt.Fprintf(out, "%s\n", fountain.LicenseText)
 		os.Exit(0)
 	}
 	if showVersion {
-		fmt.Fprintln(app.Out, app.Version())
+		fmt.Fprintf(out, "%s %s %s\n", appName, version, releaseHash)
 		os.Exit(0)
 	}
 
 	// ReadAll of input
-	src, err := ioutil.ReadAll(app.In)
-	cli.ExitOnError(app.Eout, err, quiet)
+	src, err := ioutil.ReadAll(in)
+	if err != nil {
+		fmt.Fprintf(eout, "%s\n", err)
+		os.Exit(1)
+	}
+
 	// Parse input
 	screenplay, err := fountain.Parse(src)
-	cli.OnError(app.Eout, err, quiet)
+	if err != nil {
+		fmt.Fprintf(eout, "%s\n", err)
+		os.Exit(1)
+	}
 
 	fountain.PrettyPrint = prettyPrint
 	src, err = screenplay.ToJSON()
-	cli.OnError(app.Eout, err, quiet)
+	if err != nil {
+		fmt.Fprintf(eout, "%s\n", err)
+		os.Exit(1)
+	}
 
-	fmt.Fprintf(app.Out, "%s", src)
+	fmt.Fprintf(out, "%s", src)
 	if newLine {
-		fmt.Fprintln(app.Out)
+		fmt.Fprintln(out)
 	}
 }

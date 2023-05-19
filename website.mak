@@ -1,33 +1,27 @@
 #
 # Makefile for running pandoc on all Markdown docs ending in .md
 #
-PROJECT = fountain
+PROJECT = fdx
 
-MD_PAGES = $(shell ls -1 *.md)
+PANDOC = $(shell which pandoc)
 
-HTML_PAGES = $(shell ls -1 *.md | sed -E 's/.md/.html/g')
+MD_PAGES = $(shell ls -1 *.md | grep -v 'nav.md')
 
-MAN_PAGES = fountain2html  fountain2json  fountainfmt
+HTML_PAGES = $(shell ls -1 *.md | grep -v 'nav.md' | sed -E 's/.md/.html/g')
 
-MAN_HTML = fountain2html.html  fountain2json.html  fountainfmt.html
-
-build: $(HTML_PAGES) $(MD_PAGES) $(MAN_HTML) LICENSE.html
+build: $(HTML_PAGES) $(MD_PAGES) pagefind
 
 $(HTML_PAGES): $(MD_PAGES) .FORCE
-	pandoc --metadata title=$(basename $@) -s --to html5 $(basename $@).md -o $(basename $@).html \
-	    --template=page.tmpl
-	@if [ $@ = "README.html" ]; then mv README.html index.html; fi
+	if [ -f $(PANDOC) ]; then $(PANDOC) --metadata title=$(basename $@) -s --to html5 $(basename $@).md -o $(basename $@).html \
+		--lua-filter=links-to-html.lua \
+	    --template=page.tmpl; git add $(basename $@).html; fi
+	@if [ $@ = "README.html" ]; then mv README.html index.html; git add index.html; fi
 
-$(MAN_HTML): .FORCE
-	pandoc docs/$(basename $@).md -s --to html5 -o $@ \
-		--template=page.tmpl
-
-LICENSE.html: LICENSE
-	pandoc --metadata title="$(PROJECT) License" -s --from Markdown --to html5 LICENSE -o license.html \
-	    --template=page.tmpl
+pagefind: .FORCE
+	pagefind --verbose --exclude-selectors="nav,header,footer" --bundle-dir ./pagefind --source .
+	git add pagefind
 
 clean:
 	@if [ -f index.html ]; then rm *.html; fi
-	#@if [ -f docs/index.html ]; then rm docs/*.html; fi
 
 .FORCE:

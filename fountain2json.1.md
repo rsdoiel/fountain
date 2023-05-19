@@ -1,4 +1,4 @@
-%fountain2json(1) | version 1.0.0 5d85cd0
+%fountain2json(1) | version 1.0.0 a202e3a
 % R. S. Doiel
 % 2023-05-19
 

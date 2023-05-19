@@ -11,7 +11,7 @@ authors:
     orcid: "https://orcid.org/0000-0003-0900-6903"
 
 repository-code: "https://github.com/rsdoiel/fountain"
-version: 0.0.6
+version: 1.0.0
 license-url: "https://rsdoiel.github.io/fountain/license.html"
 keywords: [ "Github", "text markup", "screen play" ]
 
@@ -20,7 +20,7 @@ keywords: [ "Github", "text markup", "screen play" ]
 About this software
 ===================
 
-## fountain 0.0.6
+## fountain 1.0.0
 
 ### Authors
 

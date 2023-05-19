@@ -2,13 +2,13 @@ package fountain
 
 const (
     // Version number of release
-    Version = "0.0.6"
+    Version = "1.0.0"
 
     // ReleaseDate, the date version.go was generated
     ReleaseDate = "2023-05-19"
 
     // ReleaseHash, the Git hash when version.go was generated
-    ReleaseHash = "9f32064"
+    ReleaseHash = "8d86ddb"
 
     LicenseText = `
 BSD 2-Clause License

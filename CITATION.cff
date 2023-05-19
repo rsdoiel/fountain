@@ -15,6 +15,6 @@ maintainers:
     orcid: ""
 
 repository-code: "https://github.com/rsdoiel/fountain"
-version: 0.0.6
+version: 1.0.0
 license-url: "https://rsdoiel.github.io/fountain/license.html"
 keywords: [ "Github", "text markup", "screen play" ]

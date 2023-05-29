@@ -39,7 +39,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"strings"
 
 	// My packages
 	"github.com/rsdoiel/fountain"
@@ -120,28 +119,13 @@ Or alternatively
 	prettyPrint bool
 )
 
-func fmtHelp(src string, appName string, version string, releaseDate string, releaseHash string) string {
-	m := map[string]string{
-		"{app_name}": appName,
-		"{version}": version,
-		"{release_date}": releaseDate,
-		"{release_hash}": releaseHash,
-	}
-	for k, v := range m {
-		if strings.Contains(src, k) {
-			src = strings.ReplaceAll(src, k, v)
-		}
-	}
-	return src
-}
-
-
 func main() {
 	appName := path.Base(os.Args[0])
 	// NOTE: the following are set with version.go is generted
 	version := fountain.Version
 	releaseDate := fountain.ReleaseDate
 	releaseHash := fountain.ReleaseHash
+	fmtHelp := fountain.FmtHelp
 
 	// Standard Options
 	flag.BoolVar(&showHelp, "help", false, "display help")

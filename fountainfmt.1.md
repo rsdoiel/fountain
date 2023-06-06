@@ -1,4 +1,4 @@
-%fountainfmt(1) | version 1.0.0 e449c93
+%fountainfmt(1) | version 1.0.0 d0465d3
 % R. S. Doiel
 % 2023-06-05
 

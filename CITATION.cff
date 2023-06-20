@@ -2,8 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "fountain"
-abstract: "A library and command line program for working with Fountain
-script/screenplay formatted files."
+abstract: "A library and command line program for working with Fountain script/screenplay formatted files."
 authors:
   - family-names: Doiel
     given-names: Robert

@@ -1,6 +1,6 @@
-%fountainfmt(1) | version 1.0.0 e449c93
+%fountainfmt(1) | version 1.0.0 e77cf8c
 % R. S. Doiel
-% 2023-06-05
+% 2023-06-20
 
 # NAME
 

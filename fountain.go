@@ -39,6 +39,9 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	// 3rd Party package
+	"gopkg.in/yaml.v3"
 )
 
 const (
@@ -143,9 +146,9 @@ type Fountain struct {
 // Element holds the parsed token in either the title page of the document or
 // scene list parts.
 type Element struct {
-	Type    int    `json:"type"`
-	Name    string `json:"name,omitempty"`
-	Content string `json:"content"`
+	Type    int    `json:"type" yaml:"type"`
+	Name    string `json:"name,omitempty" yaml:"name,omitempty"`
+	Content string `json:"content" yaml:"content"`
 }
 
 func typeName(t int) string {
@@ -1023,6 +1026,16 @@ func (doc *Fountain) ToJSON() ([]byte, error) {
 		return json.MarshalIndent(doc, "", "    ")
 	}
 	return json.Marshal(doc)
+}
+
+// ToYAML renders a Fountain type document into a YAML serialized data structure.
+func (doc *Fountain) ToYAML() ([]byte, error) {
+	src := []byte{}
+	buf := bytes.NewBuffer(src)
+	encoder := yaml.NewEncoder(buf)
+	encoder.SetIndent(2)
+	err := encoder.Encode(doc)
+	return src, err
 }
 
 // Run takes a byte split and returns an HTML fragment appropriate

@@ -1,4 +1,4 @@
-%fountainfmt(1) | version 1.0.1 acbb019
+%fountainfmt(1) | version 1.0.1 2f9ef22
 % R. S. Doiel
 % 2024-03-09
 

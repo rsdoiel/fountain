@@ -10,16 +10,16 @@ authors:
     orcid: "https://orcid.org/0000-0003-0900-6903"
 
 repository-code: "https://github.com/rsdoiel/fountain"
-version: 1.0.0
+version: 1.0.1
 license-url: "https://rsdoiel.github.io/fountain/license.html"
-keywords: [ "Github", "text markup", "screen play" ]
+keywords: [ "GitHub", "text markup", "screen play" ]
 
 ---
 
 About this software
 ===================
 
-## fountain 1.0.0
+## fountain 1.0.1
 
 ### Authors
 
@@ -39,6 +39,6 @@ A library and command line program for working with Fountain script/screenplay f
 
 ### Programming languages
 
-- Go
+- Go &gt;= 1.22
 
 

@@ -32,45 +32,58 @@
 <h1 id="synopsis">SYNOPSIS</h1>
 <p>fountainfmt <a href="#options">OPTIONS</a></p>
 <h1 id="description">DESCRIPTION</h1>
-<p>fountainfmt is a command line program that reads an fountain document and pretty prints it.</p>
+<p>fountainfmt is a command line program that reads an fountain document
+and pretty prints it.</p>
 <h1 id="options">OPTIONS</h1>
 <dl>
 <dt>-help</dt>
-<dd>display help
+<dd>
+display help
 </dd>
 <dt>-license</dt>
-<dd>display license
+<dd>
+display license
 </dd>
 <dt>-version</dt>
-<dd>display version
+<dd>
+display version
 </dd>
 <dt>-i</dt>
-<dd>read from filename
+<dd>
+read from filename
 </dd>
 <dt>-o</dt>
-<dd>write to filename
+<dd>
+write to filename
 </dd>
 <dt>-newline</dt>
-<dd>add a trailing newline
+<dd>
+add a trailing newline
 </dd>
 <dt>-width</dt>
-<dd>set text width
+<dd>
+set text width
 </dd>
 <dt>-debug</dt>
-<dd>display type and element content
+<dd>
+display type and element content
 </dd>
 <dt>-section</dt>
-<dd>include sections in output
+<dd>
+include sections in output
 </dd>
 <dt>-synopsis</dt>
-<dd>include synopsis in output
+<dd>
+include synopsis in output
 </dd>
 <dt>-notes</dt>
-<dd>include notes in output
+<dd>
+include notes in output
 </dd>
 </dl>
 <h1 id="examples">EXAMPLES</h1>
-<p>Pretty print <em>screenplay.txt</em> saving it as <em>screenplay.fountain</em>.</p>
+<p>Pretty print <em>screenplay.txt</em> saving it as
+<em>screenplay.fountain</em>.</p>
 <pre><code>fountainfmt -i screenplay.txt -o screenplay.fountain</code></pre>
 <p>Or alternatively</p>
 <pre><code>cat screenplay.txt | fountainfmt &gt; screenplay.fountain</code></pre>

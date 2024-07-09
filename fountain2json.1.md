@@ -1,6 +1,6 @@
-%fountain2json(1) | version 1.0.1 c963739
+%fountain2json(1) | version 1.0.2 4f464da
 % R. S. Doiel
-% 2024-03-09
+% 2024-07-09
 
 # NAME
 

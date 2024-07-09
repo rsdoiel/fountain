@@ -4,13 +4,19 @@ Installation
 
 This project is experimental. Get the latest release from [GitHub](https://github.com/rsdoiel/fountain/releases/). 
 
-Quick install with curl
------------------------
+Quick install with curl or irm
+------------------------------
 
 If you are using macOS or Linux you maybe able to install fountain using the following curl command.
 
 ~~~shell
 curl https://rsdoiel.github.io/fountain/installer.sh | sh
+~~~
+
+On Windows you would use Powershell and the following.
+
+~~~
+irm https://rsdoiel.github.io/fountain/installer.ps1 | iex
 ~~~
 
 Install from source

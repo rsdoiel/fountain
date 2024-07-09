@@ -32,45 +32,58 @@
 <h1 id="synopsis">SYNOPSIS</h1>
 <p>fountain2html <a href="#options">OPTIONS</a></p>
 <h1 id="description">DESCRIPTION</h1>
-<p>fountain2html is a command line program that reads an fountain document and writes out HTML.</p>
+<p>fountain2html is a command line program that reads an fountain
+document and writes out HTML.</p>
 <h1 id="options">OPTIONS</h1>
 <dl>
 <dt>-help</dt>
-<dd>display help
+<dd>
+display help
 </dd>
 <dt>-license</dt>
-<dd>display license
+<dd>
+display license
 </dd>
 <dt>-version</dt>
-<dd>display version
+<dd>
+display version
 </dd>
 <dt>-i</dt>
-<dd>read from input file
+<dd>
+read from input file
 </dd>
 <dt>-o</dt>
-<dd>read from output file
+<dd>
+read from output file
 </dd>
 <dt>-newline</dt>
-<dd>add a trailing newline
+<dd>
+add a trailing newline
 </dd>
 <dt>-page</dt>
-<dd>If true output an HTML page otherwise an HTML fragement
+<dd>
+If true output an HTML page otherwise an HTML fragement
 </dd>
 <dt>-inline-css</dt>
-<dd>Add inline CSS
+<dd>
+Add inline CSS
 </dd>
 <dt>-link-css</dt>
-<dd>Add a link to CSS (default CSS is fountain.css)
+<dd>
+Add a link to CSS (default CSS is fountain.css)
 </dd>
 <dt>-css</dt>
-<dd>Include a custom CSS file
+<dd>
+Include a custom CSS file
 </dd>
 <dt>-width</dt>
-<dd>set the width for the text
+<dd>
+set the width for the text
 </dd>
 </dl>
 <h1 id="examples">EXAMPLES</h1>
-<p>Convert a <em>screenplay.fountain</em> to <em>screenplay.html</em>.</p>
+<p>Convert a <em>screenplay.fountain</em> to
+<em>screenplay.html</em>.</p>
 <pre><code>    fountain2html -i screenplay.foutnain -o screenplay.html</code></pre>
 <p>Or alternatively</p>
 <pre><code>    cat screenplay.fountain | fountain2html &gt;screenplay.html</code></pre>

@@ -11,6 +11,11 @@
 
 ## Next (v0.1.0)
 
++ [ ] Check whether the boneyard and scene-number changes (added for the knowledge module's story support, 2026-10-17) have parallels in the other screenplay-format modules and in **scripttool**, which wraps them:
+    + **fdx**, **osf** and **scripttool**: do their Fountain conversions drop, keep or mangle a `/* ... */` boneyard now that **fountain** types it as `BoneyardType`? Do they carry `Element.SceneNumber` (FDX `Number` attribute on a scene heading, OSF scene numbers, FadeIn) into and out of Fountain's `#12A#`?
+    + Each of them pins an older **fountain** (scripttool v1.0.1, fdx v1.0.1); run their tests against the new release before bumping.
++ [ ] **fountain2html**: boneyard text is written into the page as `<div class="boneyard">`, so cut material is visible; decide whether it should be hidden by default, as Notes and Synopses are
+
 + [ ] Add test to check to validate parse structure of each `testdata/*.fountain` file
 + [ ] Add demo of using **fountain2json** for creating a script report
 + [ ] Improve **fountainfmt** pretty print options

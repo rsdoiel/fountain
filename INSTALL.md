@@ -1,57 +1,50 @@
+Installation **fountain**
+============================
 
-Installation
-------------
-
-This project is experimental. Get the latest release from [GitHub](https://github.com/rsdoiel/fountain/releases/). 
+**fountain** A library and command line program for working with Fountain script/screenplay formatted files.
 
 Quick install with curl or irm
 ------------------------------
 
-If you are using macOS or Linux you maybe able to install fountain using the following curl command.
+There is an experimental installer.sh script that can be run with the following command to install latest table release. This may work for macOS, Linux and if you’re using Windows with the Unix subsystem. This would be run from your shell (e.g. Terminal on macOS).
 
 ~~~shell
 curl https://rsdoiel.github.io/fountain/installer.sh | sh
 ~~~
 
-On Windows you would use Powershell and the following.
+This will install the programs included in fountain in your `$HOME/bin` directory.
 
-~~~
+If you are running Windows 10 or 11 use the Powershell command below.
+
+~~~ps1
 irm https://rsdoiel.github.io/fountain/installer.ps1 | iex
 ~~~
 
-Install from source
--------------------
+### If your are running macOS or Windows
 
-## Requirements
+You may get security warnings if you are using macOS or Windows. See the notes for the specific operating system you’re using to fix issues.
 
-- Golang >= 1.20
-- Pandoc >= 3
-- GNU Make
-- Git
+- [INSTALL_NOTES_macOS.md](INSTALL_NOTES_macOS.md)
+- [INSTALL_NOTES_Windows.md](INSTALL_NOTES_Windows.md)
 
-## Steps
+Installing from source
+----------------------
 
-1. Clone the Git repository for the project
-2. change directory into the cloned project
-3. Run `make`, `make test` and `make install`
+### Required software
 
-Here's what that looks like for me.
+- Go >= 1.26.4
 
-~~~
-git clone https://github.com/rsdoiel/fountain src/github.com/rsdoiel/fountain
-cd src/github.com/rsdoiel/fountain
+### Steps
+
+1. git clone https://github.com/rsdoiel/fountain
+2. Change directory into the `fountain` directory
+3. Make to build, test and install
+
+~~~shell
+git clone https://github.com/rsdoiel/fountain
+cd fountain
 make
 make test
 make install
 ~~~
-
-By default it will install the programs in `$HOME/bin`. `$HOME/bin` needs
-to be included in your `PATH`. E.g.
-
-~~~
-export PATH="$HOME/bin:$PATH"
-~~~
-
-Can be added to your `.profile`, `.bashrc` or `.zshrc` file depending on your system's shell.
-
 

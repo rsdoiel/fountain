@@ -1,32 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="language" content="EN">
-  <title>R. S. Doiel, Software Engineer/Analyst - fountain2json.1</title>
-
-  <link rel="stylesheet" type="text/css"  href="/printfonts/print.css" media="print" />
-  <link rel="stylesheet" type="text/css"  href="/webfonts/fonts.css" media="screen" />
-  <link rel="stylesheet" type="text/css"  href="/css/site.css" media="screen" />
-  <link title="RSS feed for rsdoiel's blog" rel="alternate" type="application/rss+xml" href="https://rsdoiel.github.io/rss.xml" />
-  <link title="markdown source for page" rel="alternative" type="application/markdown" href="fountain2json.1.md">
+    <title>fountain</title>
+    <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
+<a href="#main-content" class="visually-hidden">skip to main content</a>
 <nav>
 <ul>
-<li><a href="/">Home</a></li>
-<li><a href="./">README</a></li>
-<li><a href="LICENSE">LICENSE</a></li>
-<li><a href="user-manual.html">User Manual</a></li>
-<li><a href="INSTALL.html">INSTALL</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="https://github.com/rsdoiel/osf">GitHub</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="LICENSE">LICENSE</a></li>
+    <li><a href="INSTALL.html">INSTALL</a></li>
+    <li><a href="user-manual.html">User Manual</a></li>
+    <li><a href="about.html">About</a></li>
+    <!-- <li><a href="search.html">Search</a></li> -->
+    <li><a href="https://github.com/rsdoiel/fountain">Code Repository</a></li>
 </ul>
 </nav>
-
-<section>
-<!--  <h1>fountain2json.1</h1> -->
-
+<section id="main-content">
 <h1 id="name">NAME</h1>
 <p>fountain2json</p>
 <h1 id="synopsis">SYNOPSIS</h1>
@@ -34,6 +25,12 @@
 <h1 id="description">DESCRIPTION</h1>
 <p>fountain2json is a command line program that reads an fountain
 document and returns a JSON representation of it.</p>
+<p>The result has a TitlePage list and an Elements list. Each element
+has a “type” number, a “name” (for example “Scene Heading”, “Action”,
+“Dialogue” or “Boneyard”), and its “content”. A scene heading also has
+“scene_number” when the heading ends in a number written as #12A#; the
+heading’s content keeps the number. A boneyard, a block of cut material
+between /* and */ on one line or several, is one “Boneyard” element.</p>
 <h1 id="options">OPTIONS</h1>
 <dl>
 <dt>-help</dt>
@@ -75,9 +72,8 @@ pretty print the output
 <p>Or alternatively</p>
 <pre><code>    cat screenplay.fountain | fountain2json &gt; screenplay.json</code></pre>
 </section>
-
 <footer>
+<p>fountain</p>
 </footer>
-
 </body>
 </html>

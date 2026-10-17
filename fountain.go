@@ -111,6 +111,9 @@ const (
 
 var (
 	reSceneNo = regexp.MustCompile(`#*#$`)
+	// reSceneNumber captures the scene number a writer puts at the end of a
+	// scene heading, e.g. "INT. KITCHEN - DAY #12A#".
+	reSceneNumber = regexp.MustCompile(`\s#([A-Za-z0-9.\-]+)#\s*$`)
 	// MaxWidth used to set width for Fountain text output in String()
 	MaxWidth = 64
 	// AsHTMLPage if true generate the HTML header and footer blocks
@@ -149,6 +152,24 @@ type Element struct {
 	Type    int    `json:"type" yaml:"type"`
 	Name    string `json:"name,omitempty" yaml:"name,omitempty"`
 	Content string `json:"content" yaml:"content"`
+	// SceneNumber is the number written at the end of a scene heading
+	// ("INT. KITCHEN - DAY #12A#" has "12A"), empty for any other element
+	// and for a heading with no number. Content keeps the heading as
+	// written, number included.
+	SceneNumber string `json:"scene_number,omitempty" yaml:"scene_number,omitempty"`
+}
+
+// BoneyardText returns the text inside a boneyard element's content, without
+// the /* and */ delimiters and trimmed. Content that is not a boneyard is
+// returned unchanged.
+//
+//	fountain.BoneyardText("/* story: pov=Anna */") // "story: pov=Anna"
+func BoneyardText(content string) string {
+	c := strings.TrimSpace(content)
+	if !strings.HasPrefix(c, "/*") || !strings.HasSuffix(c, "*/") || len(c) < 4 {
+		return content
+	}
+	return strings.TrimSpace(c[2 : len(c)-2])
 }
 
 func typeName(t int) string {
@@ -821,10 +842,24 @@ func Parse(src []byte) (*Fountain, error) {
 	document := new(Fountain)
 	scanner := bufio.NewScanner(bytes.NewReader(src))
 	foundEndOfScript := false
+	inBoneyard := false
 	for scanner.Scan() {
 		line := scanner.Text()
 		if !foundEndOfScript {
 			currentType := getLineType(line, prevType)
+			// A boneyard is recognised before any other rule: its first line
+			// would otherwise read as Action, and the lines inside a
+			// multi-line one as Character, Dialogue or Action. A boneyard
+			// cannot open inside the title page.
+			trimmed := strings.TrimSpace(line)
+			switch {
+			case inBoneyard:
+				currentType = BoneyardType
+				inBoneyard = !strings.Contains(trimmed, "*/")
+			case prevType != TitlePageType && strings.HasPrefix(trimmed, "/*"):
+				currentType = BoneyardType
+				inBoneyard = !strings.Contains(trimmed[2:], "*/")
+			}
 			switch currentType {
 			case TitlePageType:
 				if strings.Contains(line, ":") {
@@ -875,6 +910,9 @@ func Parse(src []byte) (*Fountain, error) {
 					element.Content = line
 					document.Elements = append(document.Elements, element)
 					if element.Type == SceneHeadingType {
+						if m := reSceneNumber.FindStringSubmatch(line); m != nil {
+							element.SceneNumber = m[1]
+						}
 						foundEndOfScript = isEndOfScript(element)
 					}
 				}

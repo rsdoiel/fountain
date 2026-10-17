@@ -7,7 +7,7 @@
   "issueTracker": "https://github.com/rsdoiel/fountain/issues",
   "license": "https://www.gnu.org/licenses/agpl-3.0.txt",
   "version": "1.0.3",
-  "developmentStatus": "inactive",
+  "developmentStatus": "active",
   "releaseNotes": "Boneyards (/* ... */, one line or several) are parsed as Boneyard elements, where a one-line boneyard used to read as Action and the lines of a multi-line one as Character, Dialogue and Action. Scene headings carry their number (INT. KITCHEN - DAY #12A#) in the new Element.SceneNumber, and the JSON output has scene_number. New BoneyardText returns the text between the delimiters. Added for the knowledge module's story support.",
   "dateCreated": "2017-12-26",
   "dateModified": "2026-10-17",

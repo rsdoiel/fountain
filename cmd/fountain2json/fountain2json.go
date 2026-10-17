@@ -62,6 +62,11 @@ var (
 
 {app_name} is a command line program that reads an fountain document and returns a JSON representation of it.
 
+The result has a TitlePage list and an Elements list. Each element has a "type" number, a "name" (for example
+"Scene Heading", "Action", "Dialogue" or "Boneyard"), and its "content". A scene heading also has
+"scene_number" when the heading ends in a number written as #12A#; the heading's content keeps the number.
+A boneyard, a block of cut material between /* and */ on one line or several, is one "Boneyard" element.
+
 # OPTIONS
 
 -help

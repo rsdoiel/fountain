@@ -11,7 +11,7 @@ authors:
     orcid: "https://orcid.org/0000-0003-0900-6903"
 
 repository-code: "https://github.com/rsdoiel/fountain"
-version: 1.0.2
+version: 1.0.3
 license-url: "https://spdx.org/licenses/AGPL-3.0-or-later"
 keywords: [ "GitHub", "text markup", "screen play" ]
 
@@ -20,7 +20,7 @@ keywords: [ "GitHub", "text markup", "screen play" ]
 About this software
 ===================
 
-## fountain 1.0.2
+## fountain 1.0.3
 
 ### Authors
 

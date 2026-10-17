@@ -15,6 +15,6 @@ maintainers:
     orcid: ""
 
 repository-code: "https://github.com/rsdoiel/fountain"
-version: 1.0.2
+version: 1.0.3
 license-url: "https://spdx.org/licenses/AGPL-3.0-or-later"
 keywords: [ "GitHub", "text markup", "screen play" ]

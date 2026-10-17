@@ -14,8 +14,8 @@
   "datePublished": "2026-10-17",
   "copyrightYear": 2017,
   "copyrightHolder": "R. S. Doiel",
-  "programmingLanguage": ["Go >= 1.22"],
-  "softwareRequirements": ["Go >= 1.22"],
+  "programmingLanguage": ["Go >= 1.26.4"],
+  "softwareRequirements": ["Go >= 1.26.4"],
   "softwareSuggestions": ["CMTools >= 0.0.45b", "Pandoc >= 3.9", "GNU Make >= 3"],
   "keywords": ["GitHub", "text markup", "screen play"],
   "author": [

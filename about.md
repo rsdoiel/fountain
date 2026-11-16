@@ -18,7 +18,7 @@ version: 1.0.3
 license_url: https://www.gnu.org/licenses/agpl-3.0.txt
 
 programming_language:
-  - Go >= 1.26.4
+  - Go >= 1.27.3
 
 keywords:
   - GitHub
@@ -55,14 +55,14 @@ A library and command line program for working with Fountain script/screenplay f
 
 ## Programming languages
 
-- Go >= 1.26.4
+- Go >= 1.27.3
 
 
 
 
 ## Software Requirements
 
-- Go >= 1.26.4
+- Go >= 1.27.3
 
 
 ## Software Suggestions

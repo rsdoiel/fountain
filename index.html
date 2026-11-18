@@ -13,7 +13,6 @@
     <li><a href="INSTALL.html">INSTALL</a></li>
     <li><a href="user-manual.html">User Manual</a></li>
     <li><a href="about.html">About</a></li>
-    <!-- <li><a href="search.html">Search</a></li> -->
     <li><a href="https://github.com/rsdoiel/fountain">Code Repository</a></li>
 </ul>
 </nav>
@@ -89,7 +88,7 @@ href="https://github.com/rsdoiel/fountain/releases">GitHub</a>, or see
 source. To use the package in a Go program:</p>
 <pre class="shell"><code>go get github.com/rsdoiel/fountain</code></pre>
 <h2 id="build-and-test">Build and test</h2>
-<p>You need Go 1.26.4 or later. Pandoc and GNU Make are only needed for
+<p>You need Go 1.27.3 or later. Pandoc and GNU Make are only needed for
 the man pages and the website, and <code>cmt</code> (CMTools) only to
 regenerate <code>version.go</code>, <code>about.md</code> and
 <code>CITATION.cff</code> from <code>codemeta.json</code>.</p>
@@ -99,8 +98,9 @@ make check    # gofmt -l and go vet; rewrites nothing</code></pre>
 <p><code>get-optional-testdata.bash</code> downloads the larger sample
 screenplays from fountain.io into <code>testdata/</code>; see <a
 href="testdata.html">testdata.md</a>. <code>make generate</code> runs
-<code>cmt</code>; <code>make release</code> builds the distribution
-zips, and <code>release.bash</code> then drafts the GitHub release.</p>
+<code>cmt</code>; <code>make release</code> builds the distribution zips
+from a committed, pushed tree (it does not run <code>generate</code>),
+and <code>release.bash</code> then drafts the GitHub release.</p>
 <h2 id="release-notes">Release notes</h2>
 <p><strong>1.0.3.</strong> Boneyards are parsed as
 <code>BoneyardType</code> elements. A one-line boneyard used to read as
@@ -137,7 +137,8 @@ for all things Fountain
 </ul></li>
 </ul>
 <p><em>fountain</em> is licensed under the GNU Affero General Public
-License, version 3; see <a href="LICENSE">LICENSE</a>.</p>
+License, version 3 or (at your option) any later version; see <a
+href="LICENSE">LICENSE</a>.</p>
 </section>
 <footer>
 <p>fountain</p>

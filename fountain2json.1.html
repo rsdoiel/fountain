@@ -13,18 +13,18 @@
     <li><a href="INSTALL.html">INSTALL</a></li>
     <li><a href="user-manual.html">User Manual</a></li>
     <li><a href="about.html">About</a></li>
-    <!-- <li><a href="search.html">Search</a></li> -->
     <li><a href="https://github.com/rsdoiel/fountain">Code Repository</a></li>
 </ul>
 </nav>
 <section id="main-content">
 <h1 id="name">NAME</h1>
-<p>fountain2json</p>
+<p>fountain2json — read a Fountain document and write JSON</p>
 <h1 id="synopsis">SYNOPSIS</h1>
-<p>fountain2json <a href="#options">OPTIONS</a></p>
+<p>fountain2json <a href="#options">OPTIONS</a> [INPUT_FILENAME
+[OUTPUT_FILENAME]]</p>
 <h1 id="description">DESCRIPTION</h1>
-<p>fountain2json is a command line program that reads an fountain
-document and returns a JSON representation of it.</p>
+<p>fountain2json reads a Fountain document and writes a JSON
+representation of it.</p>
 <p>The result has a TitlePage list and an Elements list. Each element
 has a “type” number, a “name” (for example “Scene Heading”, “Action”,
 “Dialogue” or “Boneyard”), and its “content”. A scene heading also has
@@ -33,44 +33,82 @@ heading’s content keeps the number. A boneyard, a block of cut material
 between /* and */ on one line or several, is one “Boneyard” element.</p>
 <h1 id="options">OPTIONS</h1>
 <dl>
-<dt>-help</dt>
+<dt>-h, -help</dt>
 <dd>
-display help
+display this help page
 </dd>
-<dt>-license</dt>
+<dt>-l, -license</dt>
 <dd>
-display license
+display the license
 </dd>
-<dt>-version</dt>
+<dt>-v, -version</dt>
 <dd>
-display version
+display the version
 </dd>
-<dt>-i</dt>
+<dt>-i, -input FILENAME</dt>
 <dd>
-read from filename
+read from FILENAME; the default, and -, is standard input
 </dd>
-<dt>-o</dt>
+<dt>-o, -output FILENAME</dt>
 <dd>
-write to filename
+write to FILENAME; the default, and -, is standard output
 </dd>
-<dt>-newline</dt>
+<dt>-nl, -newline</dt>
 <dd>
-add a trailing newline
+add a trailing newline (the default; -newline=false leaves it off)
 </dd>
-<dt>-width</dt>
+<dt>-quiet</dt>
 <dd>
-set the width of the text
+suppress error messages; the exit status still says what happened
+</dd>
+<dt>-width N</dt>
+<dd>
+set the width of the text (default 65)
 </dd>
 <dt>-pretty</dt>
 <dd>
-pretty print the output
+indent the JSON
+</dd>
+</dl>
+<p>The input and output may also be given as the first and second
+argument.</p>
+<h1 id="exit-status">EXIT STATUS</h1>
+<dl>
+<dt>0</dt>
+<dd>
+success
+</dd>
+<dt>2</dt>
+<dd>
+bad command line: an unknown option, a bad option value, a surplus
+argument
+</dd>
+<dt>65</dt>
+<dd>
+the input is not a valid Fountain document
+</dd>
+<dt>66</dt>
+<dd>
+an input file does not exist
+</dd>
+<dt>73</dt>
+<dd>
+the output file cannot be created
+</dd>
+<dt>74</dt>
+<dd>
+reading or writing failed part way
+</dd>
+<dt>77</dt>
+<dd>
+the operating system refused access to a file
 </dd>
 </dl>
 <h1 id="examples">EXAMPLES</h1>
 <p>Render <em>screenplay.fountain</em> as <em>screenplay.json</em>.</p>
 <pre><code>fountain2json -i screenplay.fountain -o screenplay.json</code></pre>
 <p>Or alternatively</p>
-<pre><code>    cat screenplay.fountain | fountain2json &gt; screenplay.json</code></pre>
+<pre><code>cat screenplay.fountain | fountain2json &gt;screenplay.json</code></pre>
 </section>
 <footer>
 <p>fountain</p>

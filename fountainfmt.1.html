@@ -13,71 +13,108 @@
     <li><a href="INSTALL.html">INSTALL</a></li>
     <li><a href="user-manual.html">User Manual</a></li>
     <li><a href="about.html">About</a></li>
-    <!-- <li><a href="search.html">Search</a></li> -->
     <li><a href="https://github.com/rsdoiel/fountain">Code Repository</a></li>
 </ul>
 </nav>
 <section id="main-content">
 <h1 id="name">NAME</h1>
-<p>fountainfmt</p>
+<p>fountainfmt — pretty print a Fountain document</p>
 <h1 id="synopsis">SYNOPSIS</h1>
-<p>fountainfmt <a href="#options">OPTIONS</a></p>
+<p>fountainfmt <a href="#options">OPTIONS</a> [INPUT_FILENAME
+[OUTPUT_FILENAME]]</p>
 <h1 id="description">DESCRIPTION</h1>
-<p>fountainfmt is a command line program that reads an fountain document
-and pretty prints it.</p>
+<p>fountainfmt reads a Fountain document and pretty prints it.</p>
 <h1 id="options">OPTIONS</h1>
 <dl>
-<dt>-help</dt>
+<dt>-h, -help</dt>
 <dd>
-display help
+display this help page
 </dd>
-<dt>-license</dt>
+<dt>-l, -license</dt>
 <dd>
-display license
+display the license
 </dd>
-<dt>-version</dt>
+<dt>-v, -version</dt>
 <dd>
-display version
+display the version
 </dd>
-<dt>-i</dt>
+<dt>-i, -input FILENAME</dt>
 <dd>
-read from filename
+read from FILENAME; the default, and -, is standard input
 </dd>
-<dt>-o</dt>
+<dt>-o, -output FILENAME</dt>
 <dd>
-write to filename
+write to FILENAME; the default, and -, is standard output
 </dd>
-<dt>-newline</dt>
+<dt>-nl, -newline</dt>
 <dd>
-add a trailing newline
+add a trailing newline (the default; -newline=false leaves it off)
 </dd>
-<dt>-width</dt>
+<dt>-quiet</dt>
 <dd>
-set text width
+suppress error messages; the exit status still says what happened
+</dd>
+<dt>-width N</dt>
+<dd>
+set the width of the text (default 65)
 </dd>
 <dt>-debug</dt>
 <dd>
-display type and element content
+display each element’s type and content instead of the screenplay
 </dd>
 <dt>-section</dt>
 <dd>
-include sections in output
+include sections in the output
 </dd>
 <dt>-synopsis</dt>
 <dd>
-include synopsis in output
+include synopses in the output
 </dd>
 <dt>-notes</dt>
 <dd>
-include notes in output
+include notes in the output
+</dd>
+</dl>
+<p>The input and output may also be given as the first and second
+argument.</p>
+<h1 id="exit-status">EXIT STATUS</h1>
+<dl>
+<dt>0</dt>
+<dd>
+success
+</dd>
+<dt>2</dt>
+<dd>
+bad command line: an unknown option, a bad option value, a surplus
+argument
+</dd>
+<dt>65</dt>
+<dd>
+the input is not a valid Fountain document
+</dd>
+<dt>66</dt>
+<dd>
+an input file does not exist
+</dd>
+<dt>73</dt>
+<dd>
+the output file cannot be created
+</dd>
+<dt>74</dt>
+<dd>
+reading or writing failed part way
+</dd>
+<dt>77</dt>
+<dd>
+the operating system refused access to a file
 </dd>
 </dl>
 <h1 id="examples">EXAMPLES</h1>
-<p>Pretty print <em>screenplay.txt</em> saving it as
+<p>Pretty print <em>screenplay.txt</em>, saving it as
 <em>screenplay.fountain</em>.</p>
 <pre><code>fountainfmt -i screenplay.txt -o screenplay.fountain</code></pre>
 <p>Or alternatively</p>
-<pre><code>cat screenplay.txt | fountainfmt &gt; screenplay.fountain</code></pre>
+<pre><code>cat screenplay.txt | fountainfmt &gt;screenplay.fountain</code></pre>
 </section>
 <footer>
 <p>fountain</p>

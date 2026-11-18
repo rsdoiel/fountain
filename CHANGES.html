@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>fountain</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<a href="#main-content" class="visually-hidden">skip to main content</a>
+<nav>
+<ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="LICENSE">LICENSE</a></li>
+    <li><a href="INSTALL.html">INSTALL</a></li>
+    <li><a href="user-manual.html">User Manual</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="https://github.com/rsdoiel/fountain">Code Repository</a></li>
+</ul>
+</nav>
+<section id="main-content">
+<h1 id="changes">Changes</h1>
+<p>Reconstructed for v1.0.1 through v1.0.3 from the tags and the git
+history; maintained going forward.</p>
+<h2 id="v1.0.4-2026-11-18">v1.0.4 — 2026-11-18</h2>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>The licence is the GNU Affero General Public License,
+version 3 or (at your option) any later version, throughout.</strong>
+<code>LICENSE</code> and <code>codemeta.json</code> have said so since
+v1.0.2 (2024-05-20), but the headers of <code>fountain.go</code> and
+<code>fountain_test.go</code> still carried the BSD 2-Clause text of
+v1.0.1 and earlier, and no release note recorded the change. The headers
+now carry the AGPL notice, and <code>LicenseText</code> (shown by
+<code>-license</code>) is the AGPL text. v1.0.1 and the releases before
+it remain available under the BSD 2-Clause licence they were published
+with.</li>
+<li><strong>The three programs follow the workspace command line
+conventions.</strong> Exit codes follow workspace DR-0003: 2 for a bad
+command line (an unknown option, a bad value, a surplus argument), 65
+for input that is not a Fountain document, 66 for a missing input, 73
+for an output that cannot be created, 74 for a read or write failure, 77
+for a permission refusal. Before, every failure exited 1. An error is
+one line on standard error prefixed with the program name;
+<code>-quiet</code> drops the message and keeps the code. A script that
+tested for exit status 1 must test for non-zero.</li>
+<li><code>-h</code>, <code>-l</code> and <code>-v</code> join
+<code>-help</code>, <code>-license</code> and <code>-version</code>;
+<code>-input</code>, <code>-output</code> and <code>-nl</code> are long
+and short spellings of <code>-i</code>, <code>-o</code> and
+<code>-newline</code>. The input and output may be given as the first
+and second argument; a third argument is an error (before, it was
+ignored). <code>-help</code>, <code>-license</code> and
+<code>-version</code> answer before any file is opened.</li>
+<li>Help text is Markdown in the man page structure with an EXIT STATUS
+section, kept in <code>internal/cli/helptext.go</code>; the command code
+moved to <code>internal/cli</code>. The <code>*.1.md</code> pages are
+generated from it by <code>make</code>.</li>
+<li>Go 1.27.3 is the minimum version. The Makefile gained
+<code>check-go-version</code> and <code>check-committed</code>; a
+release is built from a clean, pushed commit (workspace DR-0012);
+<code>release.bash</code> takes <code>--dry-run</code>; the armv7l
+target and the website’s pagefind search are gone.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong><code>fountain2html -o FILE</code> wrote the HTML to
+standard output and left FILE empty.</strong> It now writes FILE.</li>
+</ul>
+<p>The parser and the package API are unchanged from v1.0.3.</p>
+<h2 id="v1.0.3-2026-10-17">v1.0.3 — 2026-10-17</h2>
+<ul>
+<li>Boneyards (<code>/* ... */</code>, one line or several) are parsed
+as <code>Boneyard</code> elements; before, a one-line boneyard read as
+Action and the lines of a multi-line one as Character, Dialogue and
+Action.</li>
+<li>Scene headings carry their number
+(<code>INT. KITCHEN - DAY #12A#</code>) in the new
+<code>Element.SceneNumber</code>; the JSON output has
+<code>scene_number</code>. New <code>BoneyardText</code> returns the
+text between the delimiters.</li>
+</ul>
+<h2 id="v1.0.2-2024-05-20">v1.0.2 — 2024-05-20</h2>
+<ul>
+<li>Changed the licence from BSD 2-Clause to AGPL-3.0-or-later
+(<code>LICENSE</code>, <code>codemeta.json</code>).</li>
+</ul>
+<h2 id="v1.0.1-2024-03-09">v1.0.1 — 2024-03-09</h2>
+<ul>
+<li>BSD 2-Clause licence.</li>
+</ul>
+</section>
+<footer>
+<p>fountain</p>
+</footer>
+</body>
+</html>

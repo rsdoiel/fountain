@@ -78,4 +78,4 @@ The parser is line based. The open items are in [TODO.md](TODO.md): a character 
 - [fountain.io](https://fountain.io), the official place for all things Fountain
     - [Fountain Syntax](https://fountain.io/syntax)
 
-_fountain_ is licensed under the GNU Affero General Public License, version 3; see [LICENSE](LICENSE).
+_fountain_ is licensed under the GNU Affero General Public License, version 3 or (at your option) any later version; see [LICENSE](LICENSE).

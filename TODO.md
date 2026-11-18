@@ -50,3 +50,4 @@ To match the workspace standard (knowledge and opml are the models; Go 1.27.3 ac
 - [x] Drop the armv7l target and 32-bit Pi wording (dropped 2026-10-27).
 - [x] release.ps1: take knowledge's (existing-draft check, checksums).
 - [x] Port workspace DR-0012 (2026-11-18): `check-committed`, `release` without `generate`, `release.bash` with `--dry-run` that commits and pushes nothing, `makefile_test.go`.
+- [x] CLI to the workspace practice (2026-11-18): `internal/cli` behind 12-line mains, `helptext.go` with the man page structure and EXIT STATUS, DR-0003 exit codes, `-h/-l/-v`, `cli_exit_test.go`. Fixed `fountain2html -o` writing to standard output. Not done: a `--json` error mode (DR-0011); fountain2json's output is JSON but it has no JSON error mode, as with opml2json.

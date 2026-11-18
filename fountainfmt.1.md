@@ -1,67 +1,89 @@
-%fountainfmt(1) | version 1.0.3 52955d8
+%fountainfmt(1) user manual | version 1.0.3 52955d8
 % R. S. Doiel
 % 2026-10-17
 
 # NAME
 
-fountainfmt
+fountainfmt — pretty print a Fountain document
 
 # SYNOPSIS
 
-fountainfmt [OPTIONS]
+fountainfmt [OPTIONS] [INPUT_FILENAME [OUTPUT_FILENAME]]
 
 # DESCRIPTION
 
-fountainfmt is a command line program that reads an fountain document and pretty prints it.
+fountainfmt reads a Fountain document and pretty prints it.
 
 # OPTIONS
 
--help
-: display help
+-h, -help
+: display this help page
 
--license
-: display license
+-l, -license
+: display the license
 
--version
-: display version
+-v, -version
+: display the version
 
--i
-: read from filename
+-i, -input FILENAME
+: read from FILENAME; the default, and -, is standard input
 
--o
-: write to filename
+-o, -output FILENAME
+: write to FILENAME; the default, and -, is standard output
 
--newline
-: add a trailing newline
+-nl, -newline
+: add a trailing newline (the default; -newline=false leaves it off)
 
--width
-: set text width
+-quiet
+: suppress error messages; the exit status still says what happened
+
+-width N
+: set the width of the text (default 65)
 
 -debug
-: display type and element content
+: display each element's type and content instead of the screenplay
 
 -section
-: include sections in output
+: include sections in the output
 
 -synopsis
-: include synopsis in output
+: include synopses in the output
 
 -notes
-: include notes in output
+: include notes in the output
 
+The input and output may also be given as the first and second argument.
+
+# EXIT STATUS
+
+0
+: success
+
+2
+: bad command line: an unknown option, a bad option value, a surplus argument
+
+65
+: the input is not a valid Fountain document
+
+66
+: an input file does not exist
+
+73
+: the output file cannot be created
+
+74
+: reading or writing failed part way
+
+77
+: the operating system refused access to a file
 
 # EXAMPLES
 
-Pretty print *screenplay.txt* saving it as *screenplay.fountain*.
+Pretty print *screenplay.txt*, saving it as *screenplay.fountain*.
 
-~~~
-fountainfmt -i screenplay.txt -o screenplay.fountain
-~~~
+    fountainfmt -i screenplay.txt -o screenplay.fountain
 
 Or alternatively
 
-~~~
-cat screenplay.txt | fountainfmt > screenplay.fountain
-~~~
-
+    cat screenplay.txt | fountainfmt >screenplay.fountain
 

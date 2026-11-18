@@ -16,9 +16,10 @@ RELEASE_HASH=$(shell git log --pretty=format:'%h' -n 1)
 
 MAN_PAGES_1 = $(shell ls -1 *.1.md | sed -E 's/.1.md/.1/g')
 
-MAN_PAGES_3 = $(shell ls -1 *.3.md | sed -E 's/.3.md/.3/g')
+# None of these projects has a section 3 or 7 man page; uncomment to add one.
+#MAN_PAGES_3 = $(shell ls -1 *.3.md | sed -E 's/.3.md/.3/g')
 
-MAN_PAGES_7 = $(shell ls -1 *.7.md | sed -E 's/.7.md/.7/g')
+#MAN_PAGES_7 = $(shell ls -1 *.7.md | sed -E 's/.7.md/.7/g')
 
 HTML_PAGES = $(shell find . -type f -not -path './bin/*' -not -path './.git/*' | grep -E '\.html$$')
 
@@ -69,13 +70,13 @@ $(MAN_PAGES_1): .FORCE
 	mkdir -p man/man1
 	pandoc $@.md --from markdown --to man -s >man/man1/$@
 
-$(MAN_PAGES_3): .FORCE
-	mkdir -p man/man3
-	pandoc $@.md --from markdown --to man -s >man/man3/$@
+#$(MAN_PAGES_3): .FORCE
+#	mkdir -p man/man3
+#	pandoc $@.md --from markdown --to man -s >man/man3/$@
 
-$(MAN_PAGES_7): .FORCE
-	mkdir -p man/man7
-	pandoc $@.md --from markdown --to man -s >man/man7/$@
+#$(MAN_PAGES_7): .FORCE
+#	mkdir -p man/man7
+#	pandoc $@.md --from markdown --to man -s >man/man7/$@
 
 $(PROGRAMS): $(PACKAGE)
 	@mkdir -p bin
@@ -138,10 +139,10 @@ install: build
 	@echo "Installing man page in $(PREFIX)/man"
 	@mkdir -p $(PREFIX)/man/man1
 	@for FNAME in $(MAN_PAGES_1); do if [ -f "./man/man1/$${FNAME}" ]; then cp -v "./man/man1/$${FNAME}" "$(PREFIX)/man/man1/$${FNAME}"; fi; done
-	@mkdir -p $(PREFIX)/man/man3
-	@for FNAME in $(MAN_PAGES_3); do if [ -f "./man/man3/$${FNAME}" ]; then cp -v "./man/man3/$${FNAME}" "$(PREFIX)/man/man3/$${FNAME}"; fi; done
-	@mkdir -p $(PREFIX)/man/man7
-	@for FNAME in $(MAN_PAGES_7); do if [ -f "./man/man7/$${FNAME}" ]; then cp -v "./man/man7/$${FNAME}" "$(PREFIX)/man/man7/$${FNAME}"; fi; done
+#	@mkdir -p $(PREFIX)/man/man3
+#	@for FNAME in $(MAN_PAGES_3); do if [ -f "./man/man3/$${FNAME}" ]; then cp -v "./man/man3/$${FNAME}" "$(PREFIX)/man/man3/$${FNAME}"; fi; done
+#	@mkdir -p $(PREFIX)/man/man7
+#	@for FNAME in $(MAN_PAGES_7); do if [ -f "./man/man7/$${FNAME}" ]; then cp -v "./man/man7/$${FNAME}" "$(PREFIX)/man/man7/$${FNAME}"; fi; done
 	@echo ""
 	@echo "Make sure $(PREFIX)/man is in your MANPATH"
 
@@ -150,8 +151,8 @@ uninstall: .FORCE
 	@for FNAME in $(PROGRAMS); do if [ -f "$(PREFIX)/bin/$${FNAME}$(EXT)" ]; then rm -v "$(PREFIX)/bin/$${FNAME}$(EXT)"; fi; done
 	@echo "Removing man pages in $(PREFIX)/man"
 	@for FNAME in $(MAN_PAGES_1); do if [ -f "$(PREFIX)/man/man1/$${FNAME}" ]; then rm -v "$(PREFIX)/man/man1/$${FNAME}"; fi; done
-	@for FNAME in $(MAN_PAGES_3); do if [ -f "$(PREFIX)/man/man3/$${FNAME}" ]; then rm -v "$(PREFIX)/man/man3/$${FNAME}"; fi; done
-	@for FNAME in $(MAN_PAGES_7); do if [ -f "$(PREFIX)/man/man7/$${FNAME}" ]; then rm -v "$(PREFIX)/man/man7/$${FNAME}"; fi; done
+#	@for FNAME in $(MAN_PAGES_3); do if [ -f "$(PREFIX)/man/man3/$${FNAME}" ]; then rm -v "$(PREFIX)/man/man3/$${FNAME}"; fi; done
+#	@for FNAME in $(MAN_PAGES_7); do if [ -f "$(PREFIX)/man/man7/$${FNAME}" ]; then rm -v "$(PREFIX)/man/man7/$${FNAME}"; fi; done
 
 setup_dist: .FORCE
 	@mkdir -p dist
@@ -195,13 +196,6 @@ dist/Windows-arm64: $(PROGRAMS)
 	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Windows-arm64.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/* $(DOCS)
 	@rm -fR dist/bin
 
-# Raspberry Pi OS (32 bit) based on report from Raspberry Pi Model 3B+
-dist/Linux-armv7l: $(PROGRAMS)
-	@mkdir -p dist/bin
-	@for FNAME in $(PROGRAMS); do env GOOS=linux GOARCH=arm GOARM=7 go build -o "dist/bin/$${FNAME}" cmd/$${FNAME}/*.go; done
-	@cd dist && zip -r $(PROJECT)-v$(VERSION)-Linux-armv7l.zip LICENSE codemeta.json CITATION.cff *.md bin/* man/* $(DOCS)
-	@rm -fR dist/bin
-
 distribute_docs:
 	@mkdir -p dist/
 	@cp -v codemeta.json dist/
@@ -212,7 +206,97 @@ distribute_docs:
 	@cp -vR man dist/
 	@for DNAME in $(DOCS); do cp -vR $$DNAME dist/; done
 
-release: generate build save setup_dist distribute_docs dist/Linux-x86_64 dist/Linux-aarch64 dist/macOS-x86_64 dist/macOS-arm64 dist/Windows-x86_64 dist/Windows-arm64 dist/Linux-armv7l
+# check-go-version enforces the Go version policy (workspace Go version policy): the minimum Go is
+# the highest version the release was built with, and every file that states it agrees.
+# It writes nothing. It fails when
+#   - the go line of go.mod is lower than the Go in use (go env GOVERSION),
+#   - the "Go >= " line of codemeta.json is not the go line of go.mod,
+# A go line without a patch ("1.27") is read as 1.27.0. check-release runs it.
+check-go-version: .FORCE
+	@FAIL=0; \
+	bad() { echo "check-go-version: $$1"; FAIL=1; }; \
+	full() { case "$$1" in *.*.*) echo "$$1";; *) echo "$$1.0";; esac; }; \
+	TC="$$(go env GOVERSION | sed 's/^go//')"; \
+	case "$$TC" in [0-9]*.[0-9]*) ;; *) TC="";; esac; \
+	case "$$TC" in *[!0-9.]*) TC="";; esac; \
+	if [ -z "$$TC" ]; then bad "cannot read the Go version from go env GOVERSION (a release is built with a tagged Go)"; \
+	else \
+		TC="$$(full "$$TC")"; \
+		GM="$$(full "$$(sed -n 's/^go \([0-9.]*\).*/\1/p' go.mod | head -1)")"; \
+		LOW="$$(printf '%s\n%s\n' "$$GM" "$$TC" | sort -V | head -1)"; \
+		[ "$$GM" = "$$TC" ] || [ "$$LOW" != "$$GM" ] || bad "go.mod says go $$GM, the Go in use is $$TC: the minimum is the highest version the release is built with"; \
+		CM="$$(jq -r '[.softwareRequirements[]? | select(startswith("Go >= "))][0] // empty | sub("Go >= "; "")' codemeta.json)"; \
+		[ -n "$$CM" ] || bad "codemeta.json has no \"Go >= \" line in softwareRequirements"; \
+		[ -z "$$CM" ] || [ "$$(full "$$CM")" = "$$GM" ] || bad "codemeta.json says Go >= $$CM, go.mod says go $$GM"; \
+	fi; \
+	if [ $$FAIL -ne 0 ]; then exit 1; fi; \
+	echo "check-go-version: Go $$GM is consistent"
+
+# check-committed (workspace DR-0012) makes a release come from one known commit:
+# it fails when tracked files have uncommitted changes, or when HEAD is not the
+# tip of the branch on origin (unpushed, or behind). Untracked files (bin/, dist/,
+# man/) are ignored, as git ignores them. It writes nothing.
+check-committed: .FORCE
+	@FAIL=0; \
+	bad() { echo "check-committed: $$1"; FAIL=1; }; \
+	DIRTY="$$(git status --porcelain --untracked-files=no)"; \
+	[ -z "$$DIRTY" ] || { bad "tracked files have uncommitted changes (commit and push them):"; echo "$$DIRTY"; }; \
+	REMOTE="$$(git ls-remote origin "refs/heads/$(BRANCH)" 2>/dev/null | cut -f1)"; \
+	[ -n "$$REMOTE" ] || bad "cannot find branch $(BRANCH) on origin (push it)"; \
+	[ -z "$$REMOTE" ] || [ "$$REMOTE" = "$$(git rev-parse HEAD)" ] || bad "HEAD is not the tip of origin/$(BRANCH) (push, or pull first)"; \
+	if [ $$FAIL -ne 0 ]; then exit 1; fi; \
+	echo "check-committed: $$(git rev-parse --short HEAD) is committed and pushed"
+
+# check-release reads the files a release is cut from and fails when they
+# disagree; it writes nothing. Run it before `make release` (the release target
+# runs it too). It fails when
+#   - version.go, CITATION.cff or an installer carries a version other than codemeta.json's,
+#     or CITATION.cff's date-released is not datePublished (run `make generate`),
+#   - datePublished is not today's date, the release day,
+#   - v$(VERSION) is already tagged here or on origin (codemeta.json was not bumped),
+#   - releaseNotes are the same as the last tag's (not written for this release),
+#   - softwareRequirements names a github.com/rsdoiel module at a version go.mod does not require,
+#   - the Go version policy fails (check-go-version),
+#   - the tree is not committed and pushed (check-committed, workspace DR-0012).
+check-release: .FORCE
+	@FAIL=0; V="$(VERSION)"; TODAY="$$(date +%Y-%m-%d)"; \
+	bad() { echo "check-release: $$1"; FAIL=1; }; \
+	[ -n "$$V" ] || bad "codemeta.json has no version"; \
+	GOV="$$(sed -n 's/^ *Version = "\(.*\)".*/\1/p' version.go | head -1)"; \
+	[ "$$GOV" = "$$V" ] || bad "version.go has '$$GOV', codemeta.json has '$$V' (run make generate)"; \
+	CFF="$$(sed -n 's/^version: *//p' CITATION.cff | head -1)"; \
+	[ "$$CFF" = "$$V" ] || bad "CITATION.cff has '$$CFF', codemeta.json has '$$V' (run make generate)"; \
+	DR="$$(sed -n 's/^date-released: *//p' CITATION.cff | head -1)"; \
+	PUB="$$(jq -r '.datePublished // empty' codemeta.json)"; \
+	[ "$$DR" = "$$PUB" ] || bad "CITATION.cff date-released is '$$DR', datePublished is '$$PUB' (run make generate)"; \
+	[ "$$PUB" = "$$TODAY" ] || bad "datePublished is '$$PUB', today is '$$TODAY': set datePublished and dateModified to the release day"; \
+	for F in installer.sh installer.ps1; do \
+		[ -f "$$F" ] || continue; \
+		IV="$$(grep -m1 'VERSION *= *"' "$$F" | sed 's/.*VERSION *= *"\([^"]*\)".*/\1/')"; \
+		[ "$$IV" = "$$V" ] || bad "$$F has '$$IV', codemeta.json has '$$V' (run make generate)"; \
+	done; \
+	if git rev-parse -q --verify "refs/tags/v$$V" >/dev/null; then bad "v$$V is already tagged here: codemeta.json was not bumped"; fi; \
+	if git ls-remote --exit-code --tags origin "refs/tags/v$$V" >/dev/null 2>&1; then bad "v$$V is already tagged on origin: codemeta.json was not bumped"; fi; \
+	NEW="$$(jq -r '.releaseNotes // empty' codemeta.json)"; \
+	[ -n "$$NEW" ] || bad "codemeta.json has no releaseNotes"; \
+	LAST="$$(git tag --list 'v*' --sort=-v:refname | head -1)"; \
+	if [ -n "$$LAST" ] && [ "$$LAST" != "v$$V" ]; then \
+		OLD="$$(git show "$$LAST:codemeta.json" 2>/dev/null | jq -r '.releaseNotes // empty')"; \
+		[ "$$NEW" != "$$OLD" ] || bad "releaseNotes are the same as $$LAST's: write them for v$$V"; \
+	fi; \
+	for REQ in $$(jq -r '.softwareRequirements[]? | select(startswith("github.com/rsdoiel/")) | gsub(" "; "@")' codemeta.json); do \
+		M="$${REQ%%@*}"; MIN="$${REQ##*@}"; \
+		GM="$$(grep -o "$$M v[^ ]*" go.mod | head -1 | sed 's/.* v//')"; \
+		[ -n "$$GM" ] || { bad "softwareRequirements names $$M, which go.mod does not require"; continue; }; \
+		[ "$$GM" = "$$MIN" ] || bad "softwareRequirements says $$M >= $$MIN, go.mod requires v$$GM"; \
+	done; \
+	$(MAKE) -s check-go-version || FAIL=1; \
+	$(MAKE) -s check-committed || FAIL=1; \
+	if [ $$FAIL -ne 0 ]; then echo "check-release: v$$V is NOT ready to release"; exit 1; fi; \
+	echo "check-release: v$$V is consistent"
+
+release: check-release build setup_dist distribute_docs dist/Linux-x86_64 dist/Linux-aarch64 dist/macOS-x86_64 dist/macOS-arm64 dist/Windows-x86_64 dist/Windows-arm64
+	@$(MAKE) -s check-committed
 	@printf "\nready to run\n\n\trelease.bash\n\n"
 
 

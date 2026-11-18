@@ -50,7 +50,7 @@ go get github.com/rsdoiel/fountain
 
 ## Build and test
 
-You need Go 1.26.4 or later. Pandoc and GNU Make are only needed for the man pages and the website, and `cmt` (CMTools) only to regenerate `version.go`, `about.md` and `CITATION.cff` from `codemeta.json`.
+You need Go 1.27.3 or later. Pandoc and GNU Make are only needed for the man pages and the website, and `cmt` (CMTools) only to regenerate `version.go`, `about.md` and `CITATION.cff` from `codemeta.json`.
 
 ```shell
 make          # build the programs into bin/ and the man pages into man/
@@ -58,7 +58,7 @@ make test     # go test ./...
 make check    # gofmt -l and go vet; rewrites nothing
 ```
 
-`get-optional-testdata.bash` downloads the larger sample screenplays from fountain.io into `testdata/`; see [testdata.md](testdata.md). `make generate` runs `cmt`; `make release` builds the distribution zips, and `release.bash` then drafts the GitHub release.
+`get-optional-testdata.bash` downloads the larger sample screenplays from fountain.io into `testdata/`; see [testdata.md](testdata.md). `make generate` runs `cmt`; `make release` builds the distribution zips from a committed, pushed tree (it does not run `generate`), and `release.bash` then drafts the GitHub release.
 
 ## Release notes
 
@@ -78,4 +78,4 @@ The parser is line based. The open items are in [TODO.md](TODO.md): a character 
 - [fountain.io](https://fountain.io), the official place for all things Fountain
     - [Fountain Syntax](https://fountain.io/syntax)
 
-_fountain_ is licensed under the GNU Affero General Public License, version 3; see [LICENSE](LICENSE).
+_fountain_ is licensed under the GNU Affero General Public License, version 3 or (at your option) any later version; see [LICENSE](LICENSE).

@@ -13,71 +13,109 @@
     <li><a href="INSTALL.html">INSTALL</a></li>
     <li><a href="user-manual.html">User Manual</a></li>
     <li><a href="about.html">About</a></li>
-    <!-- <li><a href="search.html">Search</a></li> -->
     <li><a href="https://github.com/rsdoiel/fountain">Code Repository</a></li>
 </ul>
 </nav>
 <section id="main-content">
 <h1 id="name">NAME</h1>
-<p>fountain2html</p>
+<p>fountain2html — read a Fountain document and write HTML</p>
 <h1 id="synopsis">SYNOPSIS</h1>
-<p>fountain2html <a href="#options">OPTIONS</a></p>
+<p>fountain2html <a href="#options">OPTIONS</a> [INPUT_FILENAME
+[OUTPUT_FILENAME]]</p>
 <h1 id="description">DESCRIPTION</h1>
-<p>fountain2html is a command line program that reads an fountain
-document and writes out HTML.</p>
+<p>fountain2html reads a Fountain document and writes it as HTML, a
+fragment suitable for including like a scrippet or, with -page, a whole
+page.</p>
 <h1 id="options">OPTIONS</h1>
 <dl>
-<dt>-help</dt>
+<dt>-h, -help</dt>
 <dd>
-display help
+display this help page
 </dd>
-<dt>-license</dt>
+<dt>-l, -license</dt>
 <dd>
-display license
+display the license
 </dd>
-<dt>-version</dt>
+<dt>-v, -version</dt>
 <dd>
-display version
+display the version
 </dd>
-<dt>-i</dt>
+<dt>-i, -input FILENAME</dt>
 <dd>
-read from input file
+read from FILENAME; the default, and -, is standard input
 </dd>
-<dt>-o</dt>
+<dt>-o, -output FILENAME</dt>
 <dd>
-read from output file
+write to FILENAME; the default, and -, is standard output
 </dd>
-<dt>-newline</dt>
+<dt>-nl, -newline</dt>
 <dd>
-add a trailing newline
+add a trailing newline (the default; -newline=false leaves it off)
+</dd>
+<dt>-quiet</dt>
+<dd>
+suppress error messages; the exit status still says what happened
+</dd>
+<dt>-width N</dt>
+<dd>
+set the width of the text (default 65)
 </dd>
 <dt>-page</dt>
 <dd>
-If true output an HTML page otherwise an HTML fragement
+output an HTML page, not a fragment
 </dd>
 <dt>-inline-css</dt>
 <dd>
-Add inline CSS
+add inline CSS
 </dd>
 <dt>-link-css</dt>
 <dd>
-Add a link to CSS (default CSS is fountain.css)
+add a link to the CSS (the default is fountain.css)
 </dd>
-<dt>-css</dt>
+<dt>-css FILENAME</dt>
 <dd>
-Include a custom CSS file
+include a custom CSS file (default fountain.css)
 </dd>
-<dt>-width</dt>
+</dl>
+<p>The input and output may also be given as the first and second
+argument.</p>
+<h1 id="exit-status">EXIT STATUS</h1>
+<dl>
+<dt>0</dt>
 <dd>
-set the width for the text
+success
+</dd>
+<dt>2</dt>
+<dd>
+bad command line: an unknown option, a bad option value, a surplus
+argument
+</dd>
+<dt>65</dt>
+<dd>
+the input is not a valid Fountain document
+</dd>
+<dt>66</dt>
+<dd>
+an input file does not exist
+</dd>
+<dt>73</dt>
+<dd>
+the output file cannot be created
+</dd>
+<dt>74</dt>
+<dd>
+reading or writing failed part way
+</dd>
+<dt>77</dt>
+<dd>
+the operating system refused access to a file
 </dd>
 </dl>
 <h1 id="examples">EXAMPLES</h1>
-<p>Convert a <em>screenplay.fountain</em> to
-<em>screenplay.html</em>.</p>
-<pre><code>    fountain2html -i screenplay.foutnain -o screenplay.html</code></pre>
+<p>Convert <em>screenplay.fountain</em> to <em>screenplay.html</em>.</p>
+<pre><code>fountain2html -i screenplay.fountain -o screenplay.html</code></pre>
 <p>Or alternatively</p>
-<pre><code>    cat screenplay.fountain | fountain2html &gt;screenplay.html</code></pre>
+<pre><code>cat screenplay.fountain | fountain2html &gt;screenplay.html</code></pre>
 </section>
 <footer>
 <p>fountain</p>

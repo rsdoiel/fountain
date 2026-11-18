@@ -14,7 +14,7 @@
 + [ ] Check whether the boneyard and scene-number changes (added for the knowledge module's story support, 2026-10-17) have parallels in the other screenplay-format modules and in **scripttool**, which wraps them:
     + **fdx**, **osf** and **scripttool**: do their Fountain conversions drop, keep or mangle a `/* ... */` boneyard now that **fountain** types it as `BoneyardType`? Do they carry `Element.SceneNumber` (FDX `Number` attribute on a scene heading, OSF scene numbers, FadeIn) into and out of Fountain's `#12A#`?
     + Each of them pins an older **fountain** (scripttool v1.0.1, fdx v1.0.1); run their tests against the new release before bumping.
-    + Checked 2026-10-17 with **scripttool** built against the local **fountain** 1.0.3: the existing tests of **fdx**, **osf** and **scripttool** pass with it. A Fountain → FDX → Fountain round trip keeps a boneyard, one line or several, as plain text (in FDX and OSF it becomes a visible paragraph, as it did when it was read as Action), and keeps a scene number only inside the heading text (`... #12A#`). Open: **fdx** neither writes the scene's FDX `Number` attribute from `Element.SceneNumber` nor reads it back; look for the same in **osf**; decide whether a boneyard should become a hidden/comment element in FDX and OSF instead of a visible paragraph.
+    + Checked 2026-10-17 with **scripttool** built against the local **fountain** 1.0.3: the existing tests of **fdx**, **osf** and **scripttool** pass with it. A Fountain → FDX → Fountain round trip keeps a boneyard, one line or several, as plain text (in FDX and OSF it becomes a visible paragraph, as it did when it was read as Action), and keeps a scene number only inside the heading text (`... #12A#`). **fdx** now writes the scene's FDX `Number` attribute from `Element.SceneNumber` and reads it back (2026-10-20, fdx `Number` attribute commit; unreleased). **osf** has no per-scene number (numbering is a document setting), so there is nothing to carry. Decided 2026-10-20: a boneyard stays a visible paragraph in FDX and OSF (lossless, round-trips as text, prints). A hidden note was considered and not done because it cannot be tested here: Final Draft shows a ScriptNote as a margin marker and leaves it out of print, but no sample FDX holds an anchored note to learn its XML from; OSF has a `<para note="...">` attribute (see `osf/testdata/OSF-2.0.xml`) whose display in Fade In is unverified, and a boneyard would need a rule for which paragraph carries it. Revisit if a Final Draft file with a ScriptNote or a Fade In install becomes available.
 + [ ] **fountain2html**: boneyard text is written into the page as `<div class="boneyard">`, so cut material is visible; decide whether it should be hidden by default, as Notes and Synopses are
 
 + [ ] Add test to check to validate parse structure of each `testdata/*.fountain` file
@@ -40,3 +40,14 @@
 + [x] Write Parse(src []byte) returning a Fountain Struct and error
 + [x] word wrap for dialogue
 
+
+## Modernization (2026-11-16)
+
+To match the workspace standard (knowledge and opml are the models; Go 1.27.3 across repositories). Do one repository at a time; run the tests and `make -n release` after each step.
+
+- [x] Go 1.27.3: change `go 1.26.4` in go.mod, the `Go >=` lines in codemeta.json, README.md and INSTALL.md; run `go mod tidy`, `go vet ./...` and the tests.
+- [x] Makefile: add `check-go-version` (go.mod, codemeta.json and the Go in use agree); `check-release` calls it.
+- [x] Drop the armv7l target and 32-bit Pi wording (dropped 2026-10-27).
+- [x] release.ps1: take knowledge's (existing-draft check, checksums).
+- [x] Port workspace DR-0012 (2026-11-18): `check-committed`, `release` without `generate`, `release.bash` with `--dry-run` that commits and pushes nothing, `makefile_test.go`.
+- [x] CLI to the workspace practice (2026-11-18): `internal/cli` behind 12-line mains, `helptext.go` with the man page structure and EXIT STATUS, DR-0003 exit codes, `-h/-l/-v`, `cli_exit_test.go`. Fixed `fountain2html -o` writing to standard output. Not done: a `--json` error mode (DR-0011); fountain2json's output is JSON but it has no JSON error mode, as with opml2json.

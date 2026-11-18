@@ -1,11 +1,11 @@
 #!/bin/sh
-# generated with CMTools 1.0.3 52955d8
+# generated with CMTools 1.0.4 7bcfa88
 
 #
 # Set the package name and version to install
 #
 PACKAGE="fountain"
-VERSION="1.0.3"
+VERSION="1.0.4"
 GIT_GROUP="rsdoiel"
 RELEASE="https://github.com/$GIT_GROUP/$PACKAGE/releases/tag/v$VERSION"
 if [ "$PKG_VERSION" != "" ]; then

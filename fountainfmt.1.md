@@ -1,6 +1,6 @@
-%fountainfmt(1) user manual | version 1.0.3 52955d8
+%fountainfmt(1) user manual | version 1.0.4 7bcfa88
 % R. S. Doiel
-% 2026-10-17
+% 2026-11-18
 
 # NAME
 

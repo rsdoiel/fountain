@@ -49,3 +49,4 @@ To match the workspace standard (knowledge and opml are the models; Go 1.27.3 ac
 - [x] Makefile: add `check-go-version` (go.mod, codemeta.json and the Go in use agree); `check-release` calls it.
 - [x] Drop the armv7l target and 32-bit Pi wording (dropped 2026-10-27).
 - [x] release.ps1: take knowledge's (existing-draft check, checksums).
+- [x] Port workspace DR-0012 (2026-11-18): `check-committed`, `release` without `generate`, `release.bash` with `--dry-run` that commits and pushes nothing, `makefile_test.go`.

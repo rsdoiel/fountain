@@ -58,7 +58,7 @@ make test     # go test ./...
 make check    # gofmt -l and go vet; rewrites nothing
 ```
 
-`get-optional-testdata.bash` downloads the larger sample screenplays from fountain.io into `testdata/`; see [testdata.md](testdata.md). `make generate` runs `cmt`; `make release` builds the distribution zips, and `release.bash` then drafts the GitHub release.
+`get-optional-testdata.bash` downloads the larger sample screenplays from fountain.io into `testdata/`; see [testdata.md](testdata.md). `make generate` runs `cmt`; `make release` builds the distribution zips from a committed, pushed tree (it does not run `generate`), and `release.bash` then drafts the GitHub release.
 
 ## Release notes
 

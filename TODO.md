@@ -9,6 +9,17 @@
 + [ ] sample-07.fountain (charade) has parenthiticals sprinkled in the dialogue, need to support this.  It meakes some dialog show up as Action in the JSON stream.
 
 
++ [ ] Transitions are almost never recognised: `CUT TO:`, `> CUT TO:` and `DISSOLVE TO:` between blank lines come out as Action (found 2026-11-18 while testing osf's `FromFountain`)
+    + Cause: in the type switch (around fountain.go:795-810) `isAction` runs before `isTransition`, and `isAction` is true for any line that is not a heading, character, dialogue or parenthetical, so `isTransition` is only reached for lines `isAction` rejects. `FADE OUT.` comes out as General Text.
+    + Expected (fountain.io syntax): an uppercase line ending in `TO:` with blank lines around it is a Transition; a line starting with `>` (and not ending in `<`) is a Transition; `> text <` is centered Action, not a Transition (`isTransition` calls both Transition).
+    + Reproduce: `INT. A - DAY`, blank, `Hello there.`, blank, `CUT TO:`, blank, `EXT. B - DAY`. Test first, per workspace DR-0007.
++ [ ] `isSceneHeading` takes any line that starts with `INT`, `EXT` or `I/E`, after upper-casing, so ordinary action is read as a Scene Heading: `Interrupted by a knock, she looks up.` and `Extras fill the room.` both come out as Scene Heading (found 2026-11-18)
+    + Expected: the prefix must be followed by `.`, ` ` or `/` (`INT.`, `EXT `, `INT./EXT.`, `I/E.`) and the line must follow a blank line.
++ [ ] A line that starts with `..` or `...` is read as a forced Scene Heading, because `isSceneHeading` accepts any leading `.`: `...and so on.` and `..and so on.` come out as Scene Heading (found 2026-11-18)
+    + Expected: a forced heading is `.` followed by a letter; `..` and `...` are ordinary text (Action).
++ [ ] Forcing markers (`!`, `@`, `~`, `.`, `>` and `<`) stay in `Element.Content` (by design, like the scene number); consumers have to strip them. **osf** strips them in `FromFountain` since 0.0.10 (`stripForcedMarker`). Decide whether fountain should offer one function for this (like `BoneyardText`) so **fdx**, **osf** and **scripttool** share the rules.
++ [ ] Title page values keep the whitespace after the key and the indentation of multi-line values (`" TITLE"`, `"\n\tContact\n\tinformation\n\n"`); **osf** trims them in `FromFountain` since 0.0.10 (`titleLines`). Decide whether `Parse` should return clean values.
+
 ## Next (v0.1.0)
 
 + [ ] Check whether the boneyard and scene-number changes (added for the knowledge module's story support, 2026-10-17) have parallels in the other screenplay-format modules and in **scripttool**, which wraps them:
